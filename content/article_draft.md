@@ -27,7 +27,7 @@ To fix this, an SRE agent needs what [Vectorize calls agent memory](https://vect
 
 ## System Architecture & The Closed Learning Loop
 
-IncidentLens couples fast LLM inference (via Groq's LLaMA 3.3 70B) with Hindsight's episodic memory engine. Rather than a passive search index, the architecture functions as a stateful feedback loop:
+IncidentLens couples ultra-fast LLM inference (via Groq's LPU running `openai/gpt-oss-120b`) with Hindsight's episodic memory engine. Rather than a passive search index, the architecture functions as a stateful feedback loop:
 
 ```
 [ New P1 Alert & Stack Trace ]

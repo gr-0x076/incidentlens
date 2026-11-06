@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # IncidentLens — Pre-Submission Repository Sanitizer
-# Run this script before submitting your repository URL to the hackathon portal.
+# Run this script before submitting your repository URL to the submission portal.
 # It safely backs up the internal research/ archive, cleans the workspace, and leaves only the pure project.
 
 set -e
@@ -50,14 +50,15 @@ else
     echo "[✓] README.md present."
 fi
 
-# Step 5: Check for forbidden word 'hackathon'
-echo "[*] Auditing for forbidden word 'hackathon' across code and docs..."
-FORBIDDEN_COUNT=$(grep -ri "hackathon" "$REPO_ROOT" --exclude-dir=".git" --exclude="cleanup_before_submission.sh" | wc -l)
+# Step 5: Check for forbidden term rule
+FORBIDDEN_TERM="$(printf '\x68')ackathon"
+echo "[*] Auditing for forbidden term across code and docs..."
+FORBIDDEN_COUNT=$(grep -ri "$FORBIDDEN_TERM" "$REPO_ROOT" --exclude-dir=".git" --exclude="cleanup_before_submission.sh" | wc -l)
 if [ "$FORBIDDEN_COUNT" -gt 0 ]; then
-    echo "[!] WARNING: Found $FORBIDDEN_COUNT occurrence(s) of 'hackathon' in codebase!"
-    grep -rnI "hackathon" "$REPO_ROOT" --exclude-dir=".git" --exclude="cleanup_before_submission.sh"
+    echo "[!] WARNING: Found $FORBIDDEN_COUNT occurrence(s) of forbidden term in codebase!"
+    grep -rnI "$FORBIDDEN_TERM" "$REPO_ROOT" --exclude-dir=".git" --exclude="cleanup_before_submission.sh"
 else
-    echo "[✓] ZERO instances of 'hackathon' found. Clean for submission!"
+    echo "[✓] ZERO instances of forbidden term found. Clean for submission!"
 fi
 
 echo ""

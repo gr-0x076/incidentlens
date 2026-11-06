@@ -17,18 +17,18 @@ def run_evaluation() -> Dict[str, Any]:
 
     engine = IncidentLensEngine(bank_id="incidentlens-sre-bank")
 
-    # Select representative test incidents across services
+    # Select representative test incidents across all 5 failure clusters
     test_cases = [
-        # Recurring Redis pool starvation
+        # Cluster 1: Recurring Redis pool starvation
         {"incident": INCIDENTS[3], "test_query": "payment-gw Redis connection pool exhaustion timeout waiting for idle object"},
-        # Concurrency deadlock
-        {"incident": INCIDENTS[7], "test_query": "inventory-service deadlock detected in stock decrement query"},
-        # Aurora stale DNS failover
-        {"incident": INCIDENTS[10], "test_query": "payment-gw ReadOnlySQLException Aurora PostgreSQL writer endpoint failover"},
-        # Kafka rebalance storm
-        {"incident": INCIDENTS[14], "test_query": "payment-gw Kafka CommitFailedException max.poll.interval.ms exceeded"},
-        # Throttling retry storm
-        {"incident": INCIDENTS[18], "test_query": "payment-gw bank partner API HTTP 429 Too Many Requests thread pool saturated"}
+        # Cluster 2: Database Concurrency deadlock
+        {"incident": INCIDENTS[4], "test_query": "inventory-service deadlock detected in stock reservation relation"},
+        # Cluster 3: Aurora stale DNS JVM cache drift
+        {"incident": INCIDENTS[8], "test_query": "payment-gw ReadOnlySQLException Aurora PostgreSQL writer endpoint failover"},
+        # Cluster 4: Kafka consumer group rebalance storm
+        {"incident": INCIDENTS[12], "test_query": "payment-gw Kafka CommitFailedException max.poll.interval.ms exceeded"},
+        # Cluster 5: Third-party API retry storm & thread saturation
+        {"incident": INCIDENTS[16], "test_query": "payment-gw bank partner API HTTP 429 Too Many Requests thread pool saturated"}
     ]
 
     stateless_results = []

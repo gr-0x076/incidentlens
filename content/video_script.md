@@ -35,7 +35,7 @@ Bold text overlay in punchy typography: "AI THAT REMEMBERS OUTAGES". Minimalist,
 ### [0:30 – 1:00] Segment 2: The Problem (Stateless Agent Amnesia)
 * **Visual Cue:** Show `use_memory: false` toggle in UI or run `test_stateless.py`. A live alert pops up: `payment-gw HTTP 502 with JedisConnectionException: Could not get resource from pool`.
 * **Narration:**
-  > "Let's see what happens without memory. We feed this P1 Redis connection pool exhaustion alert to a stateless LLaMA 3.3 model. 
+  > "Let's see what happens without memory. We feed this P1 Redis connection pool exhaustion alert to a stateless LLM running on Groq. 
   > The model suggests: 'Restart your payment gateway pods.' 
   > But here's the trap: in a shared-tier microservice architecture, restarting payment-gw does nothing because an upstream authentication canary is leaking connections. A stateless model doesn't know that. It has total amnesia."
 
