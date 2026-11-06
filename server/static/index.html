@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IncidentLens | SRE Post-Mortem Memory Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    pre, code, .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-black">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold tracking-tight text-white text-sm">IncidentLens</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">HINDSIGHT v1.2</span>
+          </div>
+          <p class="text-[10px] text-slate-400 hidden sm:block">SRE Post-Mortem Memory & Closed Feedback Loop</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-4 text-xs font-mono">
+        <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800/80 border border-slate-700/60 text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Groq LLaMA 3.3 70B
+        </span>
+        <button onclick="triggerBandRoom()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 transition-all cursor-pointer">
+          <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+          <span>Band War Room</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid Workspace -->
+  <main class="max-w-7xl w-full mx-auto p-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <!-- Left Column: Incident Input & Control (5 cols) -->
+    <div class="lg:col-span-5 space-y-4 flex flex-col">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 space-y-3.5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400"></i>
+            Active P1/P2 Incident
+          </span>
+          <select id="incidentSelect" onchange="loadPresetIncident()" class="bg-slate-950 border border-slate-700 text-xs rounded px-2 py-1 text-slate-200 font-mono focus:outline-none focus:border-emerald-500">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-medium text-slate-400 block mb-1">Incident Title & Service</label>
+          <div class="grid grid-cols-3 gap-2">
+            <input id="serviceInput" type="text" placeholder="Service" class="col-span-1 bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500" value="payment-gw">
+            <input id="titleInput" type="text" placeholder="Incident Title" class="col-span-2 bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" value="JedisConnectionException pool exhausted">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-medium text-slate-400 block mb-1">Symptoms & Deployment Context</label>
+          <textarea id="symptomsInput" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-300 focus:outline-none focus:border-emerald-500 leading-relaxed font-mono">Spike in 502 Bad Gateway responses during checkout. Upstream latency jumped to 12s. Canary deploy auth-service v2.4.1 completed 45m ago.</textarea>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-medium text-slate-400 block mb-1">Stack Trace / Raw Error Log</label>
+          <textarea id="stackTraceInput" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-rose-300/90 focus:outline-none focus:border-emerald-500 font-mono leading-tight whitespace-pre">redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+  at redis.clients.jedis.util.Pool.getResource(Pool.java:59)
+  at com.company.payment.cache.RedisSessionCache.getSession(RedisSessionCache.java:42)</textarea>
+        </div>
+
+        <!-- Mode Toggle & Action -->
+        <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="memoryToggle" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+            <span class="text-xs font-semibold text-slate-300 peer-checked:text-emerald-400">Hindsight Memory</span>
+          </label>
+
+          <button id="triageBtn" onclick="runTriage()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-black font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-950/40">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i>
+            <span>Triage Incident</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Closed Feedback Loop Widget -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 space-y-3">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-indigo-400"></i>
+          Closed Feedback Loop (Human-in-the-Loop)
+        </span>
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          Record attempted remediation outcomes into Hindsight as <span class="text-emerald-400 font-mono">Experience Facts</span> to update operational memory:
+        </p>
+        <input id="feedbackActionInput" type="text" placeholder="Mitigation attempted (e.g. Restarted payment-gw pods)" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 font-mono">
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="submitFeedback('WORKED')" class="px-3 py-1.5 bg-emerald-900/30 hover:bg-emerald-900/50 border border-emerald-500/40 text-emerald-300 rounded text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer transition-all">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Mark: WORKED</span>
+          </button>
+          <button onclick="submitFeedback('FAILED')" class="px-3 py-1.5 bg-rose-900/30 hover:bg-rose-900/50 border border-rose-500/40 text-rose-300 rounded text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer transition-all">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            <span>Mark: FAILED</span>
+          </button>
+        </div>
+        <div id="feedbackStatus" class="text-[10px] font-mono text-slate-500 italic text-center"></div>
+      </div>
+    </div>
+
+    <!-- Right Column: Triage Output & Memory Evidence Drawer (7 cols) -->
+    <div class="lg:col-span-7 space-y-4 flex flex-col">
+      
+      <!-- Triage Recommendation Card -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex-1 flex flex-col shadow-sm">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="cpu" class="w-3.5 h-3.5 text-emerald-400"></i>
+            Investigation & Mitigation Proposal
+          </span>
+          <span id="badgeMode" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            MEMORY ACTIVE
+          </span>
+        </div>
+
+        <div id="analysisOutput" class="text-xs text-slate-200 leading-relaxed font-mono whitespace-pre-wrap flex-1 overflow-y-auto max-h-[340px] p-2 bg-slate-950/60 rounded border border-slate-800/60">
+Click 'Triage Incident' to generate diagnosis and ranked mitigations grounded in historical post-mortems...
+        </div>
+      </div>
+
+      <!-- Live Memory Evidence Drawer -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="database" class="w-3.5 h-3.5 text-indigo-400"></i>
+            Hindsight Memory Evidence Drawer (4-Channel Recall)
+          </span>
+          <span id="memoriesCount" class="text-[10px] font-mono text-slate-500">0 precedents recalled</span>
+        </div>
+
+        <div id="memoryList" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+          <div class="text-[11px] text-slate-500 italic p-3 text-center bg-slate-950/40 rounded border border-slate-800/40">
+            No memories loaded yet. Run a triage in memory mode to inspect cited precedent nodes.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    let incidentsList = [];
+
+    async function init() {
+      lucide.createIcons();
+      try {
+        const resp = await fetch('/api/incidents');
+        const data = await resp.json();
+        incidentsList = data.incidents || [];
+        const select = document.getElementById('incidentSelect');
+        select.innerHTML = incidentsList.map((inc, i) => `
+          <option value="${i}">${inc.id} (${inc.service}) - ${inc.severity}</option>
+        `).join('');
+      } catch (e) {
+        console.warn('API offline, using static defaults');
+      }
+    }
+
+    function loadPresetIncident() {
+      const idx = document.getElementById('incidentSelect').value;
+      const inc = incidentsList[idx];
+      if (inc) {
+        document.getElementById('serviceInput').value = inc.service;
+        document.getElementById('titleInput').value = inc.title;
+        document.getElementById('symptomsInput').value = inc.symptoms + ' ' + (inc.deployment_context || '');
+        document.getElementById('stackTraceInput').value = inc.stack_trace;
+        document.getElementById('feedbackActionInput').value = inc.attempted_mitigations?.[0]?.action || '';
+      }
+    }
+
+    async function runTriage() {
+      const btn = document.getElementById('triageBtn');
+      const output = document.getElementById('analysisOutput');
+      const badge = document.getElementById('badgeMode');
+      const useMem = document.getElementById('memoryToggle').checked;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin mr-1">⏳</span> Analyzing...`;
+      output.innerText = "Querying Hindsight memory banks and running Groq inference...";
+
+      badge.innerText = useMem ? "MEMORY ACTIVE" : "STATELESS BASELINE";
+      badge.className = useMem 
+        ? "text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+        : "text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30";
+
+      try {
+        const resp = await fetch('/api/incidents/triage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service: document.getElementById('serviceInput').value,
+            title: document.getElementById('titleInput').value,
+            symptoms: document.getElementById('symptomsInput').value,
+            stack_trace: document.getElementById('stackTraceInput').value,
+            use_memory: useMem
+          })
+        });
+        const data = await resp.json();
+        output.innerText = data.analysis;
+        renderMemories(data.recalled_memories || []);
+      } catch (err) {
+        output.innerText = "Error communicating with backend API: " + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-black"></i><span>Triage Incident</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function renderMemories(memories) {
+      const container = document.getElementById('memoryList');
+      const count = document.getElementById('memoriesCount');
+      count.innerText = `${memories.length} precedents cited`;
+
+      if (!memories.length) {
+        container.innerHTML = `<div class="text-[11px] text-slate-500 italic p-3 text-center bg-slate-950/40 rounded border border-slate-800/40">Zero historical precedents retrieved. Operating in stateless cold-start mode.</div>`;
+        return;
+      }
+
+      container.innerHTML = memories.map((m, i) => `
+        <div class="p-2.5 bg-slate-950 rounded border border-slate-800/80 text-[11px] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">
+              ${m.type || 'WORLD FACT'}
+            </span>
+            <span class="text-[10px] font-mono text-slate-500">${m.id || `mem_${i+1}`}</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed font-mono">${m.text}</p>
+        </div>
+      `).join('');
+    }
+
+    async function submitFeedback(status) {
+      const action = document.getElementById('feedbackActionInput').value;
+      const service = document.getElementById('serviceInput').value;
+      const statusDiv = document.getElementById('feedbackStatus');
+
+      if (!action) {
+        alert("Please enter the mitigation action attempted");
+        return;
+      }
+
+      statusDiv.innerText = `Recording ${status} outcome to Hindsight...`;
+      try {
+        const resp = await fetch('/api/incidents/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            incident_id: "INC-MANUAL",
+            service: service,
+            action: action,
+            status: status,
+            notes: "Recorded via IncidentLens Triage UI"
+          })
+        });
+        const data = await resp.json();
+        statusDiv.innerText = `[✓] Successfully retained ${status} outcome as Experience Fact!`;
+        statusDiv.className = status === 'WORKED' ? "text-[10px] font-mono text-emerald-400 text-center" : "text-[10px] font-mono text-rose-400 text-center";
+      } catch (err) {
+        statusDiv.innerText = "Error: " + err.message;
+      }
+    }
+
+    function triggerBandRoom() {
+      alert("Initializing Band War Room: Check terminal or band CLI session.");
+    }
+
+    init();
+  </script>
+</body>
+</html>

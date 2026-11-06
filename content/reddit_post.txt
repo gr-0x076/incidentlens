@@ -1,0 +1,17 @@
+# Title:
+Why Stateless RAG Fails at 3 AM: Building an SRE Incident Agent with Multi-Hop Memory (Code + Benchmark)
+
+# Link:
+[URL_OF_YOUR_PUBLISHED_DEVTO_OR_MEDIUM_ARTICLE]
+
+# First Comment / Context (Optional if submitted as text with link):
+Hey everyone,
+
+We ran into a recurring issue with LLM coding and triage assistants during production incidents: standard vector RAG has total amnesia when it comes to what mitigations actually worked or failed during past outages. If an engineer restarts a pod and it fails, asking the model again yields the exact same recommendation.
+
+We built an open-source experimental agent called IncidentLens using Hindsight's episodic memory engine:
+- Replaces dense-only similarity with 4-way parallel recall (BM25 exact stack trace matching, semantic symptoms, service dependency graph hops, and temporal deployment windows).
+- Closes the feedback loop: when an engineer validates a mitigation as WORKED or FAILED, it is retained as an Experience Fact.
+- Uses agentic reflection to resolve cross-service policy conflicts (e.g., why thread-pool tuning works on Python/FastAPI services but deadlocks Java/Spring services under burst traffic).
+
+We open-sourced the 20-incident microservice evaluation benchmark and architecture. Would love feedback from SREs and agent builders on how you handle compounding memory in operational workflows!

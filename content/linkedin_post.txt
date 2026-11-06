@@ -1,0 +1,21 @@
+Most AI agents fail at 3 AM because they have amnesia.
+
+When production breaks, standard RAG retrieves text embeddings. But embeddings can't tell you that restarting pods failed 6 weeks ago for that exact error code.
+
+We built IncidentLens to give SRE agents an active feedback loop using Hindsight:
+
+• 4-way recall: BM25, semantic, service graph, and temporal deploy correlation.
+• Engineers validate fixes: WORKED vs FAILED.
+• Outcomes are retained as experience facts in Hindsight.
+• Next outage, it ranks verified fixes and warns against repeating failed steps.
+• Resolves cross-service conflicts via reflection.
+
+Result: 80% verified fix precision and 100% warning on repeat mistakes.
+
+Code: [YOUR_GITHUB_REPO_URL]
+
+#AIAgents #AI #Hindsight #AgentMemory #AIMemory #LLM
+
+---
+FIRST COMMENT TO POST:
+Check out Hindsight's memory engine here: https://github.com/vectorize-io/hindsight
