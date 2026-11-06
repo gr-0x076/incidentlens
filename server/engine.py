@@ -24,16 +24,30 @@ class IncidentLensEngine:
         self.bank_id = bank_id
         self.hindsight_base_url = os.getenv("HINDSIGHT_BASE_URL", "https://api.hindsight.vectorize.io")
         self.hindsight_api_key = os.getenv("HINDSIGHT_API_KEY", "")
-        self.groq_api_key = os.getenv("GROQ_API_KEY", "")
         self.groq_model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
-        # Initialize Groq client
-        self.groq_client = None
-        if Groq and self.groq_api_key and self.groq_api_key.startswith("gsk_"):
-            try:
-                self.groq_client = Groq(api_key=self.groq_api_key)
-            except Exception as e:
-                print(f"[IncidentLens] Warning: Failed to initialize Groq: {e}")
+        # Collect primary and backup Groq API keys
+        self.groq_api_keys = []
+        if os.getenv("GROQ_API_KEY"):
+            self.groq_api_keys.append(os.getenv("GROQ_API_KEY").strip())
+        if os.getenv("GROQ_API_KEY_BACKUP"):
+            self.groq_api_keys.append(os.getenv("GROQ_API_KEY_BACKUP").strip())
+        if os.getenv("GROQ_API_KEYS"):
+            for k in os.getenv("GROQ_API_KEYS").split(","):
+                if k.strip() and k.strip() not in self.groq_api_keys:
+                    self.groq_api_keys.append(k.strip())
+
+        # Initialize primary Groq client
+        self.groq_clients = []
+        if Groq:
+            for key in self.groq_api_keys:
+                if key.startswith("gsk_"):
+                    try:
+                        self.groq_clients.append(Groq(api_key=key))
+                    except Exception as e:
+                        print(f"[IncidentLens] Warning: Failed to initialize Groq client for key: {e}")
+        
+        self.groq_client = self.groq_clients[0] if self.groq_clients else None
 
     def _hs_headers(self) -> Dict[str, str]:
         headers = {"Content-Type": "application/json"}
@@ -336,22 +350,25 @@ class IncidentLensEngine:
 
         analysis_text = None
 
-        # Call Groq LLM if available and not failing
-        if self.groq_client:
-            try:
-                resp = self.groq_client.chat.completions.create(
-                    model=self.groq_model,
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_content}
-                    ],
-                    temperature=0.2,
-                    max_tokens=1200
-                )
-                analysis_text = resp.choices[0].message.content
-            except Exception as e:
-                print(f"[IncidentLens] Groq call failed or lacks credits ({e}). Using SRE Cognitive Synthesis.")
-                analysis_text = None
+        # Call Groq LLM with multi-key redundancy
+        if self.groq_clients:
+            for idx, client in enumerate(self.groq_clients):
+                try:
+                    resp = client.chat.completions.create(
+                        model=self.groq_model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_content}
+                        ],
+                        temperature=0.2,
+                        max_tokens=1200
+                    )
+                    analysis_text = resp.choices[0].message.content
+                    if analysis_text:
+                        break
+                except Exception as e:
+                    print(f"[IncidentLens] Groq key #{idx+1} failed or lacks credits ({e}). Trying backup/fallback...")
+                    continue
 
         if not analysis_text:
             analysis_text = self._synthesize_sre_analysis(
