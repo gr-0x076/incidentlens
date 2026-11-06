@@ -87,15 +87,6 @@ Side-by-side empirical comparison showing how memory eliminates repeat mistakes 
   <img src="docs/images/compare_modal.png" width="100%" alt="Stateless vs Memory Comparison Modal" />
 </p>
 
-> [!TIP]
-> ### 📸 How to Update Project Screenshots from Your Local Machine
-> 1. Run the local server: `python -m uvicorn server.app:app --host 0.0.0.0 --port 8000`
-> 2. Open `http://localhost:8000` in your browser.
-> 3. Capture a screenshot (**Win + Shift + S** on Windows or **Cmd + Shift + 4** on macOS).
-> 4. Save your image directly to `docs/images/dashboard.png` (or `compare_modal.png`, `triage_result.png`).
-> 5. Commit: `git add docs/images/*` — GitHub renders them immediately above!
-
----
 
 ## Cross-Service Policy Reflection (`reflect()`)
 
