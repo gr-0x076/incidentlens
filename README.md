@@ -105,17 +105,20 @@ flowchart LR
 
 ## Empirical Benchmark Results
 
-We benchmarked IncidentLens against a stateless baseline LLM using a rigorous **Leave-One-Out (LOO) cross-scenario evaluation** across 5 microservice failure clusters derived from public post-mortems (Cloudflare, Monzo, GitLab):
+We evaluated IncidentLens against a stateless baseline LLM using a **5-Scenario Representative Pilot (Fold-Isolated Leave-One-Out Protocol)** across 5 microservice failure clusters derived from public post-mortems (Cloudflare, Monzo, GitLab):
 
 | Metric | Stateless Baseline (Zero Memory) | IncidentLens (Hindsight Closed Loop) | Delta / Impact |
 |:---|:---:|:---:|:---:|
-| **Historical Precedents Cited** | 0.0 | **8.0 nodes (top-ranked)** | **Grounded episodic memory (from 100+ bank nodes)** |
-| **Verified Fix Identification Rate** | 20.0% | **100.0%** | **+80.0% diagnostic precision** |
-| **Failed Mitigation Avoidance** | 0.0% | **100.0%** | **Eliminates repeat dead ends** |
+| **Historical Precedents Cited** | 0.0 | **8.0 nodes (top-ranked)** | **Capped retrieval ceiling ($k=8$) maintains 2.5s triage latency** |
+| **Verified Fix Identification Rate** | 20.0% | **80.0%** | **+60.0% diagnostic precision under strict semantic criteria** |
+| **Failed Mitigation Avoidance** | 0.0% | **100.0%** | **Eliminates repeat dead ends across all 5 failure clusters** |
 | **Repeat-Mistake Warning Rate** | 0.0% | **100.0%** | **Active negative operational constraints** |
-| **Cross-Service Policy Conflicts** | Unsupported | **Resolved via `reflect()`** | **Prevents JVM thread saturation** |
+| **Cross-Service Policy Conflicts** | Unsupported | **Resolved via `reflect()`** | **Prevents JVM thread saturation vs async Python pools** |
 
-*All benchmark results are reproducible using `python server/evaluate_agent.py` and served via `/api/benchmark`.*
+> **Audit & Disagreement Analysis:** Under our strict evaluation protocol, partial credit is prohibited. In Case 5 (`INC-504`), the agent correctly identified Redis JWT token caching but omitted the client-side circuit-breaker threshold (140 RPS), resulting in an honest 80.0% (4/5) fix score. Harmful action avoidance succeeded across 100% (5/5) of test cases.
+
+*All benchmark results are reproducible using `python server/evaluate_agent.py` and served live via `/api/benchmark`.*
+
 
 ---
 

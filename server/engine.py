@@ -56,11 +56,12 @@ class IncidentLensEngine:
             headers["Authorization"] = f"Bearer {self.hindsight_api_key}"
         return headers
 
-    def _hs_url(self, endpoint: str) -> str:
+    def _hs_url(self, endpoint: str, bank_id: Optional[str] = None) -> str:
+        b_id = bank_id or self.bank_id
         base = self.hindsight_base_url.rstrip("/")
-        return f"{base}/v1/default/banks/{self.bank_id}/{endpoint.lstrip('/')}"
+        return f"{base}/v1/default/banks/{b_id}/{endpoint.lstrip('/')}"
 
-    def check_hindsight_live(self) -> Dict[str, Any]:
+    def check_hindsight_live(self, bank_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Performs a true network heartbeat to Hindsight Cloud / Local container.
         Returns live connectivity and latency.
@@ -71,7 +72,7 @@ class IncidentLensEngine:
         start_time = time.time()
         try:
             payload = {"query": "healthcheck", "budget": "low"}
-            resp = requests.post(self._hs_url("memories/recall"), headers=self._hs_headers(), json=payload, timeout=3.5)
+            resp = requests.post(self._hs_url("memories/recall", bank_id=bank_id), headers=self._hs_headers(), json=payload, timeout=3.5)
             latency = int((time.time() - start_time) * 1000)
             if resp.status_code in (200, 201):
                 return {"connected": True, "latency_ms": latency, "status_code": resp.status_code}
@@ -108,7 +109,7 @@ class IncidentLensEngine:
             lat = int((time.time() - start_time) * 1000)
             return {"connected": False, "latency_ms": lat, "error": str(e)}
 
-    def retain_incident(self, incident: Dict[str, Any]) -> str:
+    def retain_incident(self, incident: Dict[str, Any], bank_id: Optional[str] = None) -> str:
         """
         Retains a historical incident post-mortem into the Hindsight memory bank via direct REST API.
         """
@@ -136,19 +137,19 @@ class IncidentLensEngine:
         }
 
         try:
-            resp = requests.post(self._hs_url("memories"), headers=self._hs_headers(), json=payload, timeout=30)
+            resp = requests.post(self._hs_url("memories", bank_id=bank_id), headers=self._hs_headers(), json=payload, timeout=30)
             return resp.text
         except Exception as e:
             print(f"[IncidentLens] Retain error: {e}")
             return "err"
 
-    def retain_batch(self, items: List[Dict[str, Any]]) -> bool:
+    def retain_batch(self, items: List[Dict[str, Any]], bank_id: Optional[str] = None) -> bool:
         """
         Retains a batch of memory items into the Hindsight memory bank.
         """
         payload = {"items": items}
         try:
-            resp = requests.post(self._hs_url("memories"), headers=self._hs_headers(), json=payload, timeout=45)
+            resp = requests.post(self._hs_url("memories", bank_id=bank_id), headers=self._hs_headers(), json=payload, timeout=45)
             return resp.status_code in (200, 201)
         except Exception as e:
             print(f"[IncidentLens] Retain batch error: {e}")
@@ -160,7 +161,8 @@ class IncidentLensEngine:
         service: str,
         action: str,
         status: str,  # 'WORKED' or 'FAILED'
-        notes: str = ""
+        notes: str = "",
+        bank_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Closes the learning loop: Records human-validated mitigation outcome as an Experience Fact via direct REST API.
@@ -192,7 +194,7 @@ class IncidentLensEngine:
         upstream_mem_id = None
 
         try:
-            resp = requests.post(self._hs_url("memories"), headers=self._hs_headers(), json=payload, timeout=30)
+            resp = requests.post(self._hs_url("memories", bank_id=bank_id), headers=self._hs_headers(), json=payload, timeout=30)
             if resp.status_code in (200, 201):
                 success = True
                 try:
@@ -220,7 +222,12 @@ class IncidentLensEngine:
             "recorded_at": datetime.now(timezone.utc).isoformat()
         }
 
-    def recall_incident_context(self, query: str, service: Optional[str] = None) -> List[Dict[str, Any]]:
+    def recall_incident_context(
+        self,
+        query: str,
+        service: Optional[str] = None,
+        bank_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Executes Hindsight's 4-way parallel recall over past incidents and verified outcomes via direct REST API.
         """
@@ -232,7 +239,7 @@ class IncidentLensEngine:
         }
 
         try:
-            resp = requests.post(self._hs_url("memories/recall"), headers=self._hs_headers(), json=payload, timeout=30)
+            resp = requests.post(self._hs_url("memories/recall", bank_id=bank_id), headers=self._hs_headers(), json=payload, timeout=30)
             if resp.status_code == 200:
                 raw_results = resp.json().get("results", [])
                 memories = []
@@ -392,7 +399,8 @@ class IncidentLensEngine:
         service: str,
         symptoms: str,
         stack_trace: str,
-        use_memory: bool = True
+        use_memory: bool = True,
+        bank_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Triages an incoming incident.
@@ -402,7 +410,7 @@ class IncidentLensEngine:
         recalled_memories = []
         if use_memory:
             search_terms = f"{service} {title} {stack_trace[:150]}"
-            recalled_memories = self.recall_incident_context(search_terms, service=service)
+            recalled_memories = self.recall_incident_context(search_terms, service=service, bank_id=bank_id)
 
         system_prompt = (
             "You are IncidentLens, a principal Site Reliability Engineer (SRE) assistant. "

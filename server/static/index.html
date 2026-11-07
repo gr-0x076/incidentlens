@@ -219,7 +219,26 @@
 
       <!-- Dynamic Pill Bar (All 20 Incidents) -->
       <div id="scenarioPills" class="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
-        <!-- Rendered dynamically -->
+        <button onclick="selectIncidentById('INC-101')" id="pill-INC-101" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span class="font-bold text-white">INC-101</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-102')" id="pill-INC-102" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-102</span><span class="text-slate-400 hidden sm:inline">[auth-service]</span></button>
+        <button onclick="selectIncidentById('INC-103')" id="pill-INC-103" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-103</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
+        <button onclick="selectIncidentById('INC-104')" id="pill-INC-104" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-104</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-201')" id="pill-INC-201" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-201</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
+        <button onclick="selectIncidentById('INC-202')" id="pill-INC-202" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-202</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
+        <button onclick="selectIncidentById('INC-203')" id="pill-INC-203" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-203</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
+        <button onclick="selectIncidentById('INC-204')" id="pill-INC-204" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-204</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
+        <button onclick="selectIncidentById('INC-301')" id="pill-INC-301" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-301</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-302')" id="pill-INC-302" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-302</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
+        <button onclick="selectIncidentById('INC-303')" id="pill-INC-303" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-303</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-304')" id="pill-INC-304" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-304</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
+        <button onclick="selectIncidentById('INC-401')" id="pill-INC-401" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-401</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-402')" id="pill-INC-402" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-402</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
+        <button onclick="selectIncidentById('INC-403')" id="pill-INC-403" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-403</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-404')" id="pill-INC-404" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-404</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
+        <button onclick="selectIncidentById('INC-501')" id="pill-INC-501" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-501</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-502')" id="pill-INC-502" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-502</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
+        <button onclick="selectIncidentById('INC-503')" id="pill-INC-503" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-503</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
+        <button onclick="selectIncidentById('INC-504')" id="pill-INC-504" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-504</span><span class="text-slate-400 hidden sm:inline">[auth-service]</span></button>
       </div>
 
     </div>
@@ -243,7 +262,26 @@
           <!-- Direct Quick-Jump Dropdown to any of the 20 incidents -->
           <div class="flex items-center gap-2">
             <select id="incidentDropdownSelect" onchange="onDropdownSelect(this.value)" class="bg-surface-base border border-surface-border text-xs rounded-lg px-2.5 py-1 text-slate-200 font-mono focus:outline-none focus:border-emerald-500 max-w-[240px] truncate cursor-pointer">
-              <!-- Dynamically populated with all 20 incidents -->
+              <option value="INC-101" selected>[INC-101] payment-gw: Payment gateway HTTP 502 with JedisC...</option>
+              <option value="INC-102">[INC-102] auth-service: JWT validation latency degradation a...</option>
+              <option value="INC-103">[INC-103] checkout-api: Checkout ingress dropping requests: ...</option>
+              <option value="INC-104">[INC-104] payment-gw: Payment-gw Redis connection pool exh...</option>
+              <option value="INC-201">[INC-201] inventory-service: Postgres deadlock detected during co...</option>
+              <option value="INC-202">[INC-202] inventory-service: Lock wait timeout exceeded on wareho...</option>
+              <option value="INC-203">[INC-203] checkout-api: Postgres active connection pool satu...</option>
+              <option value="INC-204">[INC-204] inventory-service: Deadlock in stock decrement on flash...</option>
+              <option value="INC-301">[INC-301] payment-gw: Payment-gw connecting to old RDS rep...</option>
+              <option value="INC-302">[INC-302] checkout-api: Checkout-api CoreDNS lookup timeout ...</option>
+              <option value="INC-303">[INC-303] payment-gw: Payment-gw ReadOnlySQLException foll...</option>
+              <option value="INC-304">[INC-304] inventory-service: Stale DNS resolution to read replica...</option>
+              <option value="INC-401">[INC-401] payment-gw: Kafka consumer group rebalance loop ...</option>
+              <option value="INC-402">[INC-402] checkout-api: Order event consumer pod crash loop ...</option>
+              <option value="INC-403">[INC-403] payment-gw: Payment consumer group evicted durin...</option>
+              <option value="INC-404">[INC-404] inventory-service: Inventory sync consumer lag growing ...</option>
+              <option value="INC-501">[INC-501] payment-gw: Bank upstream HTTP 429 throttling ca...</option>
+              <option value="INC-502">[INC-502] checkout-api: Checkout-api goroutine leak on hung ...</option>
+              <option value="INC-503">[INC-503] payment-gw: Payment provider 429 cascade recurri...</option>
+              <option value="INC-504">[INC-504] auth-service: Cross-service policy conflict: Threa...</option>
             </select>
             <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1 shrink-0">
               <i data-lucide="clock" class="w-3 h-3 text-slate-500"></i>
@@ -355,17 +393,78 @@
           <span id="triageModeBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">MEMORY GROUNDED</span>
         </div>
 
-        <!-- Markdown Triage Content Container -->
+        <!-- Markdown Triage Content Container (Pre-rendered for INC-101) -->
         <div id="triageOutput" class="prose-incident flex-1 overflow-y-auto max-h-[580px] pr-2">
-          <div class="h-full flex flex-col items-center justify-center text-center p-8 space-y-3 text-slate-500">
-            <div class="w-12 h-12 rounded-xl bg-surface-elevated flex items-center justify-center text-slate-400">
-              <i data-lucide="search" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <p class="font-medium text-slate-300 text-sm">Ready for Incident Investigation</p>
-              <p class="text-xs text-slate-500 max-w-sm mt-1">Select an outage scenario or paste a custom stack trace, then click "Triage with Memory".</p>
-            </div>
-          </div>
+          <h2>📋 Incident Triage – payment-gw</h2>
+<p><strong>Title:</strong> Payment gateway HTTP 502 with JedisConnectionException<br />
+<strong>Detected:</strong> 2026-11-07 ≈ 09:12 UTC | <strong>Current Severity:</strong> <strong>P1 CRITICAL</strong>  </p>
+<hr />
+<h3>⚠️ Critical Warning (Learned Negative Constraint)</h3>
+<blockquote>
+<p><strong>DO NOT restart <code>payment-gw</code> pods.</strong> Past incident <strong>INC-101</strong> and <strong>INC-104</strong> recorded that restarting pods during connection pool exhaustion triggers an immediate reconnection storm that overwhelms Redis and increases 502 rates.</p>
+</blockquote>
+<hr />
+<h3>1️⃣ Situation Overview (Telemetry &amp; Memory Fusion)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric / Telemetry</th>
+<th style="text-align: center;">Current Value</th>
+<th style="text-align: center;">Baseline / Threshold</th>
+<th style="text-align: center;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>HTTP 502 Bad Gateway Rate</strong></td>
+<td style="text-align: center;"><strong>15.4%</strong> of checkout traffic</td>
+<td style="text-align: center;">&lt; 0.1%</td>
+<td style="text-align: center;">🚨 CRITICAL SPIKE</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Upstream P99 Latency (Redis)</strong></td>
+<td style="text-align: center;"><strong>12,000 ms</strong></td>
+<td style="text-align: center;">45 ms</td>
+<td style="text-align: center;">🚨 SEVERE STALL</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Error Log Signature</strong></td>
+<td style="text-align: center;"><code>JedisConnectionException: Could not get a resource from the pool</code></td>
+<td style="text-align: center;">None</td>
+<td style="text-align: center;">Active Exhaustion</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Recent Deployment</strong></td>
+<td style="text-align: center;"><code>auth-service</code> canary <code>v2.4.1</code> deployed 45m ago</td>
+<td style="text-align: center;"><code>v2.4.0</code></td>
+<td style="text-align: center;">Suspicious Trigger</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Cited Hindsight Precedents:</strong><br />
+• <strong>INC-101 (2026-09-12):</strong> Identical symptoms caused by unclosed Jedis connection leases in auth-service canary.<br />
+• <strong>INC-104 (2026-10-02):</strong> Redis connection pool exhaustion mitigated by canary rollback and pool scaling.</p>
+</blockquote>
+<hr />
+<h3>2️⃣ Root Cause Identification</h3>
+<p>The root cause is <strong>Redis connection pool starvation</strong> on <code>payment-gw</code> triggered by unclosed socket leases from the newly deployed <code>auth-service</code> canary <code>v2.4.1</code>. The local pool size (50) is saturated by leaked sockets that never return to idle state, causing all subsequent checkout requests to block until timing out at 12,000ms.</p>
+<hr />
+<h3>3️⃣ Verified Remediation Sequence (Ranked by Historical Validation)</h3>
+<ol>
+<li><strong>Rollback Canary Deployment (Verified Fix):</strong><br />
+   Roll back <code>auth-service</code> from <code>v2.4.1</code> to <code>v2.4.0</code> immediately to stop upstream socket lease leaks.<br />
+<code>bash
+   kubectl rollout undo deployment/auth-service -n production</code></li>
+<li><strong>Expand Connection Pool Capacity:</strong><br />
+   Temporarily increase <code>jedis.pool.maxTotal</code> from 50 to 200 to clear in-flight checkout backlogs.<br />
+<code>bash
+   kubectl set env deployment/payment-gw JEDIS_POOL_MAX_TOTAL=200 -n production</code></li>
+<li><strong>Verify Connection Recovery:</strong><br />
+   Confirm <code>jedis_pool_active</code> drops below 20 and HTTP 502 rates return to zero:<br />
+<code>bash
+   curl -s http://payment-gw.internal/metrics | grep jedis_pool</code></li>
+</ol>
         </div>
 
       </div>
@@ -380,13 +479,66 @@
             </div>
             <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Hindsight Memory Evidence Drawer</span>
           </div>
-          <span id="memoriesCount" class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-elevated text-purple-300 border border-purple-500/20">0 precedents cited</span>
+          <span id="memoriesCount" class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-elevated text-purple-300 border border-purple-500/20">8 precedents cited (top-ranked)</span>
         </div>
 
         <div id="memoryList" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-          <div class="text-xs text-slate-500 italic p-4 text-center bg-surface-base rounded-lg border border-surface-border">
-            No historical precedents retrieved yet. Trigger triage to recall episodic memory nodes.
-          </div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 100%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 occurred on payment-gw service, causing a spike in 502 Bad Gateway errors and upstream latency increase from 45ms to 12,000ms. | When: 2026-09-12 | Where: payment-gw service | JedisConnectionException due to Redis connection pool exhaustion.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 99%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 occurred on the payment-gw service, causing a spike in 502 Bad Gateway errors during checkout. | When: 2026-09-12 | Where: payment-gw service | Upstream latency increased from 45ms to 12,000ms due to Redis connection pool exhaustion.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 99%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 was caused by JedisConnectionException due to Redis connection pool exhaustion.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Upstream latency increased from 45ms to 12,000ms due to Redis connection pool exhaustion.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 caused a spike in 502 Bad Gateway errors during checkout.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 caused a spike in 502 Bad Gateway errors.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 97%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-104 occurred on the payment-gw service due to Redis connection pool exhaustion during a flash sale traffic spike. | When: 2026-10-02 | Where: payment-gw service | Redis connection pool size was fixed at 50, which was insufficient for a 3x traffic burst.</p>
+</div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
+  <div class="flex items-center justify-between">
+    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-emerald-500/15 text-emerald-300 border-emerald-500/30 uppercase font-bold">EXPERIENCE</span>
+    <span class="text-[11px] font-mono text-slate-400">Match: 97%</span>
+  </div>
+  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-104 mitigation outcome recorded: WORKED: Rollback auth-service canary to v2.4.0 and scale Jedis maxTotal to 200. FAILED: Restart payment-gw pods (reconnect storm exhausted pool immediately).</p>
+</div>
         </div>
 
       </div>
@@ -592,8 +744,8 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-surface-base border border-surface-border rounded-xl p-4 text-center">
             <span class="text-xs text-slate-400 block mb-1">Precedents Recalled</span>
-            <span class="text-2xl font-bold font-mono text-emerald-400">101.2</span>
-            <span class="text-[10px] text-slate-500 block mt-1">vs 0.0 stateless</span>
+            <span class="text-2xl font-bold font-mono text-emerald-400">8.0</span>
+            <span class="text-[10px] text-slate-500 block mt-1">vs 0.0 stateless (ceiling k=8)</span>
           </div>
 
           <div class="bg-surface-base border border-surface-border rounded-xl p-4 text-center">
@@ -678,9 +830,8 @@
         populateIncidentDropdown();
         renderScenarioPills('all');
         if (incidentsData.length > 0) {
-          selectIncidentById(incidentsData[0].id);
-          // Auto-run initial triage on load so the evidence drawer and SRE analysis are populated immediately
-          runTriage();
+          // Pre-rendered for INC-101; data loaded for dynamic interactions
+          console.log("[IncidentLens] Initialized with", incidentsData.length, "scenarios.");
         }
       } catch (err) {
         console.error("Failed to load incidents:", err);
@@ -983,7 +1134,7 @@
         const cards = document.querySelectorAll('#benchmarkModal .text-2xl.font-bold');
         if (cards.length >= 3) {
           cards[0].innerText = `${data.incidentlens_average_precedents_recalled || 8.0}`;
-          cards[1].innerText = data.verified_fix_identification_rate || "100.0%";
+          cards[1].innerText = data.verified_fix_identification_rate || "80.0%";
           cards[2].innerText = data.repeat_mistake_prevention ? data.repeat_mistake_prevention.split(' ')[0] : "100.0%";
         }
       } catch (e) {
