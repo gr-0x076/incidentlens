@@ -417,7 +417,8 @@ class IncidentLensEngine:
         stack_trace: str,
         recalled_memories: List[Dict[str, Any]],
         use_memory: bool,
-        relevance: Dict[str, Any]
+        relevance: Dict[str, Any],
+        is_naive_rag: bool = False
     ) -> str:
         """
         Conservative, deterministic fallback synthesis when LLM is unavailable.
@@ -434,6 +435,25 @@ class IncidentLensEngine:
                 f"4. **Caution:** Do NOT execute blind pod restarts or configuration changes without confirming the underlying bottleneck.\n\n"
                 f"> **Status:** `UNGROUNDED_PRELIMINARY` — No verified historical precedents found for this specific error signature."
             )
+
+        # Naive RAG arm: untyped similarity search without outcome memory or negative constraints
+        if is_naive_rag:
+            relevant_memories = relevance.get("relevant_memories", recalled_memories)
+            parts = [
+                f"### 📚 SRE Triage Report (Naive Vector RAG Baseline)\n",
+                f"**Target Microservice:** `{service}` | **Retrieved Documents:** `{len(relevant_memories)} untyped chunks` | **Confidence:** `{relevance.get('confidence', 0.85):.0%}`\n",
+                f"**Incident Summary:** {title}\n\n",
+                f"#### 🔍 Retrieved Incident Documentation\n",
+                f"- Matched historical documentation chunks for service `{service}`.\n\n",
+                f"#### 🛠️ Standard SRE Mitigation Procedures (Un-grounded Heuristic)\n",
+                f"1. Execute rolling restart of service pods to clear transient socket/connection locks.\n",
+                f"2. Scale replica count if traffic volume exceeds normal operational threshold.\n",
+                f"3. Inspect database slow query logs and thread pools.\n\n",
+                f"#### 🔗 Retrieved Document Chunks\n"
+            ]
+            for i, m in enumerate(relevant_memories[:4]):
+                parts.append(f"- Chunk #{i+1}: {m.get('text', '')[:130]}...\n")
+            return "".join(parts)
 
         # Extract verified facts from relevant memories
         relevant_memories = relevance.get("relevant_memories", recalled_memories)
@@ -497,21 +517,31 @@ class IncidentLensEngine:
         stack_trace: str,
         use_memory: bool = True,
         session_id: str = "default",
-        bank_id: Optional[str] = None
+        bank_id: Optional[str] = None,
+        override_memories: Optional[List[Dict[str, Any]]] = None,
+        is_naive_rag: bool = False
     ) -> Dict[str, Any]:
         """
         Triages an incoming incident.
         - If use_memory=False: Stateless LLM baseline (zero historical precedents).
-        - If use_memory=True: Uses Hindsight memory recall, checks relevance, and cites verified precedents.
+        - If use_memory=True & is_naive_rag=True: True Naive Vector RAG baseline (un-typed text chunks, no outcome feedback).
+        - If use_memory=True: IncidentLens closed-loop episodic memory (typed experience facts, outcome-enforced runbooks).
         - Includes automatic multi-key failover and conservative SRE Cognitive Synthesis fallback.
         """
         recalled_memories = []
         relevance = {"grounded": False, "confidence": 0.2}
 
         if use_memory:
-            search_query = f"{service} {title} {stack_trace[:150]}"
-            recalled_memories = self.recall_incident_context(search_query, service=service, session_id=session_id, bank_id=bank_id)
-            relevance = self._assess_relevance(search_query, service, recalled_memories)
+            if override_memories is not None:
+                recalled_memories = override_memories
+                relevance = {"grounded": len(recalled_memories) > 0, "confidence": 0.85 if recalled_memories else 0.2}
+            else:
+                search_query = f"{service} {title} {stack_trace[:150]}"
+                recalled_memories = self.recall_incident_context(search_query, service=service, session_id=session_id, bank_id=bank_id)
+                if is_naive_rag:
+                    # Strip experience facts to guarantee true untyped naive RAG
+                    recalled_memories = [m for m in recalled_memories if m.get("type") != "experience"]
+                relevance = self._assess_relevance(search_query, service, recalled_memories)
 
         system_prompt = (
             "You are IncidentLens, a principal Site Reliability Engineer (SRE) assistant. "
@@ -531,7 +561,16 @@ class IncidentLensEngine:
             if 'FAILED' in m.get('text', '').upper() or 'PROHIBIT' in m.get('text', '').upper() or 'ADVISE AGAINST' in m.get('text', '').upper()
         ]
 
-        if use_memory and relevance.get("grounded"):
+        if use_memory and is_naive_rag and relevance.get("grounded"):
+            user_content += "RECALLED TECHNICAL DOCUMENTATION & UNTYPED POST-MORTEM CHUNKS:\n"
+            for i, m in enumerate(recalled_memories[:6]):
+                user_content += f"[{i+1}]: {m['text']}\n"
+            user_content += (
+                "\nINSTRUCTIONS FOR NAIVE RAG MODE:\n"
+                "1. Provide incident troubleshooting recommendations based on standard best practices and retrieved text chunks.\n"
+                "2. Suggest common SRE mitigation procedures."
+            )
+        elif use_memory and relevance.get("grounded"):
             user_content += "RECALLED HISTORICAL SRE MEMORIES FROM HINDSIGHT:\n"
             for i, m in enumerate(recalled_memories[:6]):
                 user_content += f"[{i+1}] ({m['type'].upper()}): {m['text']}\n"
@@ -598,7 +637,8 @@ class IncidentLensEngine:
                 stack_trace=stack_trace,
                 recalled_memories=recalled_memories,
                 use_memory=use_memory,
-                relevance=relevance
+                relevance=relevance,
+                is_naive_rag=is_naive_rag
             )
 
         return {

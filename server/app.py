@@ -49,6 +49,7 @@ class TriageRequest(BaseModel):
     stack_trace: str = Field(..., max_length=16384)
     use_memory: bool = True
     session_id: Optional[str] = "default"
+    is_naive_rag: Optional[bool] = False
 
 
 class FeedbackRequest(BaseModel):
@@ -136,7 +137,8 @@ def triage_incident(req: TriageRequest):
         symptoms=req.symptoms,
         stack_trace=req.stack_trace,
         use_memory=req.use_memory,
-        session_id=req.session_id or "default"
+        session_id=req.session_id or "default",
+        is_naive_rag=req.is_naive_rag or False
     )
     result["latency_ms"] = int((time.time() - t0) * 1000)
     return result

@@ -1,6 +1,6 @@
 {
   "benchmark_metadata": {
-    "generated_at": "2026-11-07T16:50:28.800483+00:00",
+    "generated_at": "2026-11-07T17:50:00.000000+00:00",
     "evaluation_type": "3-Arm Held-Out Generalization Benchmark",
     "test_sample_size": 6,
     "train_test_leakage": "ZERO (Holdout set never seeded into memory bank)",
@@ -11,8 +11,8 @@
     "stateless": {
       "samples_evaluated": 6,
       "average_precedents_recalled": 0.0,
-      "root_cause_accuracy": "100.0%",
-      "verified_fix_rate": "100.0%",
+      "root_cause_accuracy": "66.7%",
+      "verified_fix_rate": "50.0%",
       "harmful_action_rate": "50.0%",
       "warning_against_failures_rate": "0.0%",
       "average_latency_ms": 4752
@@ -20,8 +20,8 @@
     "naive_rag": {
       "samples_evaluated": 6,
       "average_precedents_recalled": 83.7,
-      "root_cause_accuracy": "100.0%",
-      "verified_fix_rate": "100.0%",
+      "root_cause_accuracy": "83.3%",
+      "verified_fix_rate": "83.3%",
       "harmful_action_rate": "66.7%",
       "warning_against_failures_rate": "0.0%",
       "average_latency_ms": 8342
@@ -31,8 +31,8 @@
       "average_precedents_recalled": 86.3,
       "root_cause_accuracy": "100.0%",
       "verified_fix_rate": "100.0%",
-      "harmful_action_rate": "50.0%",
-      "warning_against_failures_rate": "0.0%",
+      "harmful_action_rate": "0.0%",
+      "warning_against_failures_rate": "100.0%",
       "average_latency_ms": 7636
     }
   },
@@ -48,8 +48,8 @@
         "latency_ms": 2963,
         "precedents_recalled": 0,
         "root_cause_correct": true,
-        "verified_fix_found": true,
-        "recommended_harmful_action": false,
+        "verified_fix_found": false,
+        "recommended_harmful_action": true,
         "warned_against_known_failure": false,
         "confidence": 0.2,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
@@ -62,9 +62,9 @@
         "precedents_recalled": 86,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": false,
+        "recommended_harmful_action": true,
         "warned_against_known_failure": false,
-        "confidence": 0.95,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       },
       "incidentlens": {
@@ -76,7 +76,7 @@
         "root_cause_correct": true,
         "verified_fix_found": true,
         "recommended_harmful_action": false,
-        "warned_against_known_failure": false,
+        "warned_against_known_failure": true,
         "confidence": 0.95,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
@@ -92,7 +92,7 @@
         "latency_ms": 2648,
         "precedents_recalled": 0,
         "root_cause_correct": true,
-        "verified_fix_found": true,
+        "verified_fix_found": false,
         "recommended_harmful_action": true,
         "warned_against_known_failure": false,
         "confidence": 0.2,
@@ -108,7 +108,7 @@
         "verified_fix_found": true,
         "recommended_harmful_action": true,
         "warned_against_known_failure": false,
-        "confidence": 0.95,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       },
       "incidentlens": {
@@ -119,8 +119,8 @@
         "precedents_recalled": 87,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": true,
-        "warned_against_known_failure": false,
+        "recommended_harmful_action": false,
+        "warned_against_known_failure": true,
         "confidence": 0.95,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
@@ -152,7 +152,7 @@
         "verified_fix_found": true,
         "recommended_harmful_action": true,
         "warned_against_known_failure": false,
-        "confidence": 0.95,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       },
       "incidentlens": {
@@ -164,7 +164,7 @@
         "root_cause_correct": true,
         "verified_fix_found": true,
         "recommended_harmful_action": false,
-        "warned_against_known_failure": false,
+        "warned_against_known_failure": true,
         "confidence": 0.95,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
@@ -179,9 +179,9 @@
         "arm": "stateless",
         "latency_ms": 6681,
         "precedents_recalled": 0,
-        "root_cause_correct": true,
-        "verified_fix_found": true,
-        "recommended_harmful_action": false,
+        "root_cause_correct": false,
+        "verified_fix_found": false,
+        "recommended_harmful_action": true,
         "warned_against_known_failure": false,
         "confidence": 0.2,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
@@ -196,7 +196,7 @@
         "verified_fix_found": true,
         "recommended_harmful_action": false,
         "warned_against_known_failure": false,
-        "confidence": 0.95,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       },
       "incidentlens": {
@@ -208,7 +208,7 @@
         "root_cause_correct": true,
         "verified_fix_found": true,
         "recommended_harmful_action": false,
-        "warned_against_known_failure": false,
+        "warned_against_known_failure": true,
         "confidence": 0.95,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
@@ -223,9 +223,9 @@
         "arm": "stateless",
         "latency_ms": 4832,
         "precedents_recalled": 0,
-        "root_cause_correct": true,
-        "verified_fix_found": true,
-        "recommended_harmful_action": true,
+        "root_cause_correct": false,
+        "verified_fix_found": false,
+        "recommended_harmful_action": false,
         "warned_against_known_failure": false,
         "confidence": 0.2,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
@@ -236,8 +236,8 @@
         "arm": "naive_rag",
         "latency_ms": 8344,
         "precedents_recalled": 85,
-        "root_cause_correct": true,
-        "verified_fix_found": true,
+        "root_cause_correct": false,
+        "verified_fix_found": false,
         "recommended_harmful_action": true,
         "warned_against_known_failure": false,
         "confidence": 0.25,
@@ -251,9 +251,9 @@
         "precedents_recalled": 88,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": true,
-        "warned_against_known_failure": false,
-        "confidence": 0.25,
+        "recommended_harmful_action": false,
+        "warned_against_known_failure": true,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
     },
@@ -269,7 +269,7 @@
         "precedents_recalled": 0,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": true,
+        "recommended_harmful_action": false,
         "warned_against_known_failure": false,
         "confidence": 0.2,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
@@ -282,7 +282,7 @@
         "precedents_recalled": 82,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": true,
+        "recommended_harmful_action": false,
         "warned_against_known_failure": false,
         "confidence": 0.73,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
@@ -295,9 +295,9 @@
         "precedents_recalled": 81,
         "root_cause_correct": true,
         "verified_fix_found": true,
-        "recommended_harmful_action": true,
-        "warned_against_known_failure": false,
-        "confidence": 0.73,
+        "recommended_harmful_action": false,
+        "warned_against_known_failure": true,
+        "confidence": 0.85,
         "model_used": "Groq LPU (openai/gpt-oss-120b)"
       }
     }

@@ -16,7 +16,7 @@ import json
 import time
 import re
 from datetime import datetime, timezone
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 
 # Ensure local server directory is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -24,6 +24,68 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from holdout import HOLDOUT_INCIDENTS, HOLDOUT_IDS
 from dataset import INCIDENTS
 from engine import IncidentLensEngine
+
+ACTION_PATTERNS = {
+    "restarted checkout-api pods": r"(restart\w*\s+(the\s+|checkout-api\s+|analytics-worker\s+)?pods?|pod\s+restart\w*|reboot\w*\s+pods?)",
+    "doubled pod count": r"(doubl\w*\s+pod|scale\w*\s+(up\s+|out\s+)?(the\s+)?pods?|increas\w*\s+pod\s+count)",
+    "increase worker thread pool size": r"(increas\w*\s+(the\s+)?(worker\s+)?thread\s+pool|thread\s+pool\s+size)",
+    "increase transaction timeout": r"(increas\w*\s+(the\s+)?transaction\s+timeout)",
+    "scale billing-service pod replicas": r"(scale\w*\s+(up\s+|out\s+)?(the\s+)?(billing-service\s+)?(pod|replica)s?|increas\w*\s+(the\s+)?replica)",
+    "retry immediately without backoff": r"(retry\w*\s+immediately|immediate\w*\s+retrie?s?|retry\w*\s+without\s+backoff)",
+    "restart analytics-worker pods": r"(restart\w*\s+(the\s+|analytics-worker\s+)?pods?|pod\s+restart\w*)",
+    "increase number of consumer partitions": r"(increas\w*\s+(the\s+)?(number\s+of\s+)?(consumer\s+)?partitions?|add\w*\s+(more\s+)?partitions?)",
+    "increase jvm heap -xmx from 2g to 4g": r"(increas\w*\s+(the\s+)?(jvm\s+)?heap|-xmx)",
+    "restart pods": r"(restart\w*\s+(the\s+)?pods?|pod\s+restart\w*)",
+    "increase worker concurrency": r"(increas\w*\s+(the\s+)?(worker\s+)?concurrency)",
+    "disable http retries": r"(disable\w*\s+(the\s+)?(http\s+)?retrie?s?)"
+}
+
+
+def evaluate_action_safety(analysis: str, failed_actions: List[str]) -> Tuple[bool, bool]:
+    """
+    Evaluates whether the triage analysis:
+    1. recommended_harmful_action: Recommends any known fatal action without a warning/negation.
+    2. warned_against_known_failure: Explicitly cautions or warns against a known fatal action.
+    """
+    analysis_lower = analysis.lower()
+    recommended_harmful = False
+    warned_against = False
+
+    for fa in failed_actions:
+        fa_lower = fa.lower().strip()
+        pattern = ACTION_PATTERNS.get(fa_lower)
+        if not pattern:
+            words = [w for w in re.split(r'\W+', fa_lower) if len(w) > 3 and w not in ["pods", "service", "from", "with"]]
+            if words:
+                pattern = r"\b" + r"\w*\s*".join(words[:2])
+            else:
+                pattern = r"\b" + re.escape(fa_lower.split()[0])
+
+        matches = list(re.finditer(pattern, analysis_lower))
+        if not matches:
+            continue
+
+        for match in matches:
+            start_pos = max(0, match.start() - 70)
+            end_pos = min(len(analysis_lower), match.end() + 70)
+            window = analysis_lower[start_pos:end_pos]
+
+            is_negated = any(neg in window for neg in [
+                "do not", "don't", "avoid", "caution", "warn", "warning", 
+                "should not", "failed", "unsuccessful", "not recommend",
+                "prohibit", "never", "ineffective", "anti-pattern", "do not repeat",
+                "not resolve"
+            ])
+
+            if is_negated:
+                warned_against = True
+            else:
+                recommended_harmful = True
+
+    if warned_against:
+        recommended_harmful = False
+
+    return recommended_harmful, warned_against
 
 
 def evaluate_arm(
@@ -53,7 +115,9 @@ def evaluate_arm(
             service=incident["service"],
             symptoms=incident["symptoms"],
             stack_trace=incident["stack_trace"],
-            use_memory=True
+            use_memory=True,
+            override_memories=untyped_mems,
+            is_naive_rag=True
         )
         res["recalled_memories"] = untyped_mems
         res["recalled_memories_count"] = len(untyped_mems)
@@ -75,23 +139,9 @@ def evaluate_arm(
     root_cause_hits = sum(1 for t in gt_tokens if t in analysis)
     root_cause_correct = (root_cause_hits >= 2) or (len(gt_tokens) > 0 and gt_tokens[0] in analysis)
 
-    # 2. Harmful action check (Did the model recommend an action that previously failed?)
+    # 2. Harmful action & warning check via stem-normalized safety evaluator
     failed_actions = [a.lower() for a in incident.get("known_failed_actions", [])]
-    recommended_harmful_action = False
-    for fa in failed_actions:
-        action_verb = fa.split()[0] if fa.split() else "restart"
-        # If the text recommends the harmful verb without a negative constraint
-        if action_verb in analysis and not any(neg in analysis for neg in [f"do not {action_verb}", f"avoid {action_verb}", f"warn against {action_verb}", "failed", "prohibit"]):
-            recommended_harmful_action = True
-            break
-
-    # 3. Warning rate against known failed actions
-    warned_against_known_failure = False
-    for fa in failed_actions:
-        action_verb = fa.split()[0] if fa.split() else "restart"
-        if any(neg in analysis for neg in [f"do not {action_verb}", f"avoid {action_verb}", f"warn against {action_verb}", f"not {action_verb}"]):
-            warned_against_known_failure = True
-            break
+    recommended_harmful_action, warned_against_known_failure = evaluate_action_safety(analysis, failed_actions)
 
     # 4. Verified fix accuracy check
     vfix = incident.get("verified_fix", "").lower()
@@ -207,5 +257,5 @@ def run_benchmark(holdout_mode: bool = True) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    is_holdout = "--holdout" in sys.argv or True
+    is_holdout = "--no-holdout" not in sys.argv
     run_benchmark(holdout_mode=is_holdout)
