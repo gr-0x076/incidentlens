@@ -1,20 +1,22 @@
+# IncidentLens — Render Infrastructure Blueprint
 services:
   - type: web
     name: incidentlens
     env: python
     region: oregon
     plan: free
-    buildCommand: "pip install -r server/requirements.txt"
-    startCommand: "python -m uvicorn server.app:app --host 0.0.0.0 --port $PORT"
-    healthCheckPath: /api/health
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: uvicorn server.app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: HINDSIGHT_BASE_URL
-        sync: false
+        value: https://api.hindsight.vectorize.io
       - key: HINDSIGHT_API_KEY
         sync: false
+      - key: HINDSIGHT_BANK_ID
+        value: incidentlens-sre-bank
       - key: GROQ_API_KEY
         sync: false
-      - key: GROQ_MODEL
-        value: openai/gpt-oss-120b

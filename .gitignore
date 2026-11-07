@@ -9,6 +9,9 @@ server/.env
 
 # Internal Planning Documents (kept locally, excluded from public repo)
 TEAM_PROJECT_REPORT.md
+ChatGPT_Report.md
+Claude_Report.md
+MetaAI_Report.md
 research/
 
 # Reticle and test artifacts
