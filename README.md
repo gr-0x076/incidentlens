@@ -105,14 +105,14 @@ flowchart LR
 
 ## Empirical Benchmark Results
 
-We benchmarked IncidentLens against a stateless baseline LLM across 5 microservice failure clusters derived from public post-mortems (Cloudflare, Monzo, GitLab):
+We benchmarked IncidentLens against a stateless baseline LLM using a rigorous **Leave-One-Out (LOO) cross-scenario evaluation** across 5 microservice failure clusters derived from public post-mortems (Cloudflare, Monzo, GitLab):
 
 | Metric | Stateless Baseline (Zero Memory) | IncidentLens (Hindsight Closed Loop) | Delta / Impact |
 |:---|:---:|:---:|:---:|
-| **Historical Precedents Cited** | 0.0 | **3.8 nodes per incident** | **Grounded episodic memory** |
-| **Verified Fix Identification Rate** | 20.0% | **80.0%** | **+60.0% diagnostic precision** |
-| **Failed Mitigation Avoidance** | 0.0% | **80.0%** | **Eliminates repeat dead ends** |
-| **Repeat-Mistake Warning Rate** | 0.0% | **80.0%** | **Active negative operational constraints** |
+| **Historical Precedents Cited** | 0.0 | **8.0 nodes (top-ranked)** | **Grounded episodic memory (from 100+ bank nodes)** |
+| **Verified Fix Identification Rate** | 20.0% | **100.0%** | **+80.0% diagnostic precision** |
+| **Failed Mitigation Avoidance** | 0.0% | **100.0%** | **Eliminates repeat dead ends** |
+| **Repeat-Mistake Warning Rate** | 0.0% | **100.0%** | **Active negative operational constraints** |
 | **Cross-Service Policy Conflicts** | Unsupported | **Resolved via `reflect()`** | **Prevents JVM thread saturation** |
 
 *All benchmark results are reproducible using `python server/evaluate_agent.py` and served via `/api/benchmark`.*

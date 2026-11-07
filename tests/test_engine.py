@@ -51,3 +51,26 @@ def test_honest_offline_feedback_reporting():
     )
     assert outcome["success"] is False
     assert outcome["error"] is not None
+
+
+def test_check_groq_live_interface():
+    engine = IncidentLensEngine(bank_id="test-bank")
+    res = engine.check_groq_live()
+    assert isinstance(res, dict)
+    assert "connected" in res
+    assert "latency_ms" in res
+
+
+def test_benchmark_results_structure():
+    import json
+    eval_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'server', 'eval_results.json'))
+    assert os.path.exists(eval_file)
+    with open(eval_file, "r") as f:
+        data = json.load(f)
+    assert data["test_cases_evaluated"] == 5
+    assert data["sample_clusters"] == 5
+    assert "verified_fix_identification_rate" in data
+    assert "failed_mitigation_avoidance_rate" in data
+    assert "cases" in data
+    assert len(data["cases"]) == 5
+

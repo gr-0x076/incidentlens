@@ -86,6 +86,28 @@ class IncidentLensEngine:
             latency = int((time.time() - start_time) * 1000)
             return {"connected": False, "latency_ms": latency, "error": str(e)}
 
+    def check_groq_live(self) -> Dict[str, Any]:
+        """
+        Performs a true live probe against upstream Groq API.
+        Returns live connectivity and latency.
+        """
+        if not self.groq_client:
+            return {"connected": False, "error": "No active Groq client configured", "latency_ms": 0}
+        
+        start_time = time.time()
+        try:
+            resp = self.groq_client.chat.completions.create(
+                model=self.groq_model,
+                messages=[{"role": "user", "content": "ping"}],
+                max_tokens=2,
+                timeout=4.0
+            )
+            lat = int((time.time() - start_time) * 1000)
+            return {"connected": True, "latency_ms": lat}
+        except Exception as e:
+            lat = int((time.time() - start_time) * 1000)
+            return {"connected": False, "latency_ms": lat, "error": str(e)}
+
     def retain_incident(self, incident: Dict[str, Any]) -> str:
         """
         Retains a historical incident post-mortem into the Hindsight memory bank via direct REST API.
@@ -223,7 +245,12 @@ class IncidentLensEngine:
                         "metadata": r.get("metadata", {}) or {},
                         "scores": scores_dict
                     })
-                return memories
+                # Sort by composite / semantic relevance score descending and cap to top 8
+                memories.sort(
+                    key=lambda x: (x.get("scores", {}) or {}).get("final") or (x.get("scores", {}) or {}).get("semantic") or 0.0,
+                    reverse=True
+                )
+                return memories[:8]
         except Exception as e:
             print(f"[IncidentLens] Recall error: {e}")
         return []

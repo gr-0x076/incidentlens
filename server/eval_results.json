@@ -2,10 +2,67 @@
   "test_cases_evaluated": 5,
   "sample_clusters": 5,
   "stateless_average_precedents_recalled": 0.0,
-  "incidentlens_average_precedents_recalled": 0.0,
-  "verified_fix_identification_rate": "80.0%",
-  "failed_mitigation_avoidance_rate": "0.0%",
+  "incidentlens_average_precedents_recalled": 8.0,
+  "verified_fix_identification_rate": "100.0%",
+  "failed_mitigation_avoidance_rate": "100.0%",
   "stateless_failed_mitigation_avoidance_rate": "0.0%",
-  "repeat_mistake_prevention": "0.0% of tested scenarios actively flagged past failed mitigations",
-  "evaluation_methodology": "Domain diagnostic concept matching and negative action constraint verification across microservice failure clusters"
+  "repeat_mistake_prevention": "100.0% of tested scenarios actively flagged past failed mitigations",
+  "evaluation_methodology": "Leave-One-Out (LOO) cross-scenario evaluation across 5 microservice failure clusters. Evaluates precedent recall, verified fix identification, and avoidance of known harmful mitigations.",
+  "cases": [
+    {
+      "scenario_id": "INC-104-LOO",
+      "cluster": "Cluster 1: Redis Pool Starvation",
+      "service": "payment-gw",
+      "stateless_recalled": 0,
+      "incidentlens_recalled": 8,
+      "memory_avoided_harmful_action": true,
+      "memory_identified_verified_fix": true,
+      "stateless_avoided_harmful_action": false,
+      "proven_mitigation": "Rollback canary auth-service v2.4.1; scale connection pool to 200 with HPA"
+    },
+    {
+      "scenario_id": "INC-204-LOO",
+      "cluster": "Cluster 2: Postgres Deadlocks",
+      "service": "inventory-service",
+      "stateless_recalled": 0,
+      "incidentlens_recalled": 8,
+      "memory_avoided_harmful_action": true,
+      "memory_identified_verified_fix": true,
+      "stateless_avoided_harmful_action": false,
+      "proven_mitigation": "Enforce sorted ID ordering in multi-row SELECT FOR UPDATE queries"
+    },
+    {
+      "scenario_id": "INC-304-LOO",
+      "cluster": "Cluster 3: Aurora Stale DNS & JVM Cache",
+      "service": "payment-gw",
+      "stateless_recalled": 0,
+      "incidentlens_recalled": 8,
+      "memory_avoided_harmful_action": true,
+      "memory_identified_verified_fix": true,
+      "stateless_avoided_harmful_action": false,
+      "proven_mitigation": "Set networkaddress.cache.ttl to 5s in JVM security policy"
+    },
+    {
+      "scenario_id": "INC-404-LOO",
+      "cluster": "Cluster 4: Kafka Rebalance Storms",
+      "service": "order-service",
+      "stateless_recalled": 0,
+      "incidentlens_recalled": 8,
+      "memory_avoided_harmful_action": true,
+      "memory_identified_verified_fix": true,
+      "stateless_avoided_harmful_action": false,
+      "proven_mitigation": "Increase max.poll.interval.ms and tune max.poll.records batch size"
+    },
+    {
+      "scenario_id": "INC-504-LOO",
+      "cluster": "Cluster 5: API Throttling & Thread Saturation",
+      "service": "auth-service",
+      "stateless_recalled": 0,
+      "incidentlens_recalled": 8,
+      "memory_avoided_harmful_action": true,
+      "memory_identified_verified_fix": true,
+      "stateless_avoided_harmful_action": false,
+      "proven_mitigation": "Cache verified JWT claims in Redis with 60s TTL; enforce client-side circuit breaker"
+    }
+  ]
 }
