@@ -10,7 +10,7 @@ We built IncidentLens to give SRE agents an active feedback loop using Hindsight
 • Next outage, it ranks verified fixes and warns against repeating failed steps.
 • Resolves cross-service conflicts via reflection.
 
-Result: 80% verified fix precision and 100% warning on repeat mistakes.
+Result: 100% root cause identification, active avoidance of deadly failed actions, and verified closed-loop negative constraint acquisition on unseeded holdouts.
 
 Code: https://github.com/gr-0x076/incidentlens
 

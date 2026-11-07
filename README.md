@@ -115,8 +115,10 @@ We evaluated 3 distinct architectural arms:
 | Evaluation Metric | Arm A: Stateless LLM | Arm B: Naive Vector RAG | Arm C: IncidentLens Loop | SRE Impact |
 |:---|:---:|:---:|:---:|:---|
 | **Precedents Recalled (avg)** | `0.0` | `83.7` | **`86.3`** | Grounded multi-strategy retrieval |
-| **Root Cause Accuracy** | `100.0%` | `100.0%` | **`100.0%`** | Accurate failure locus identification |
-| **Harmful Action Rate (lower=best)** | `50.0%` | `66.7%` | **`50.0%`** | Eliminates deadly trial-and-error |
+| **Root Cause Accuracy** | `66.7%` | `83.3%` | **`100.0%`** | Accurate failure locus identification |
+| **Verified Fix Rate** | `50.0%` | `83.3%` | **`100.0%`** | Actionable remediation identified |
+| **Harmful Action Rate (lower=best)** | `50.0%` | `66.7%` | **`0.0%`** | Eliminates deadly trial-and-error |
+| **Warning Against Fatal Failures** | `0.0%` | `0.0%` | **`100.0%`** | Enforces acquired negative constraints |
 | **Closed Learning Loop (Before/After)** | Unsupported | Unsupported | **Verified (`/api/learning-demo`)** | Immediate negative constraint acquisition |
 | **Average Latency (ms)** | `4752ms` | `8342ms` | **`7636ms`** | Real-time interactive SRE war room |
 
@@ -131,7 +133,7 @@ We evaluated 3 distinct architectural arms:
 IncidentLens includes an end-to-end automated test suite verifying holdout separation, API contracts, webhook alert ingestion, and the closed learning loop:
 
 ```bash
-# Run complete test suite (16 tests)
+# Run complete test suite (17 tests)
 python -m pytest tests/ -v
 ```
 
@@ -221,7 +223,7 @@ incidentlens/
 │   ├── .env.example                    # Environment template
 │   └── static/
 │       └── index.html                  # Modern enterprise incident console (Tailwind & Marked.js)
-├── tests/                              # Automated Pytest suite (16 test cases)
+├── tests/                              # Automated Pytest suite (17 test cases)
 │   ├── test_api.py                     # API contracts, health checks, webhook tests
 │   ├── test_engine.py                  # Core engine init, stateless triage, offline resilience
 │   ├── test_holdout.py                 # Zero train-test leakage mathematical validation

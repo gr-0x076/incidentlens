@@ -14,4 +14,4 @@ We built an open-source experimental agent called IncidentLens using Hindsight's
 - Closes the feedback loop: when an engineer validates a mitigation as WORKED or FAILED, it is retained as an Experience Fact.
 - Uses agentic reflection to resolve cross-service policy conflicts (e.g., why thread-pool tuning works on Python/FastAPI services but deadlocks Java/Spring services under burst traffic).
 
-We open-sourced the 20-incident microservice evaluation benchmark and architecture. Would love feedback from SREs and agent builders on how you handle compounding memory in operational workflows!
+We open-sourced the 6-scenario holdout evaluation benchmark and 20-incident precedent catalog. Would love feedback from SREs and agent builders on how you handle compounding memory in operational workflows!

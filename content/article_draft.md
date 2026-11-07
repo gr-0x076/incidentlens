@@ -137,19 +137,29 @@ The [Hindsight documentation](https://hindsight.vectorize.io/) explains how `ref
 
 ---
 
-## Empirical Evaluation: Measuring the Memory Advantage
+## Empirical Evaluation: 3-Arm Holdout Generalization Benchmark
 
-To see if this actually made a difference, we benchmarked IncidentLens against a stateless LLM across 20 realistic microservice outage scenarios modeled on published SRE post-mortems.
+To ensure zero circular evaluation or train-test leakage, we benchmarked IncidentLens across **6 unseeded holdout microservice outage scenarios** (`HOLD-101` through `HOLD-601`). These incidents were **never ingested** into Hindsight memory.
 
-Here are the measured results from our evaluation harness:
+We evaluated three distinct architectural configurations:
+- **Arm A (Stateless LLM):** Zero memory, pure foundational model inference (`openai/gpt-oss-120b`).
+- **Arm B (Naive Vector RAG):** Standard untyped semantic text similarity without feedback weighting.
+- **Arm C (IncidentLens Memory Loop):** Hindsight multi-strategy typed memory (World Facts, Experience Facts, Observations) + closed human-in-the-loop feedback loop.
 
-| Metric | Stateless LLM | IncidentLens (Hindsight Loop) |
-|:---|:---:|:---:|
-| **Average Historical Precedents Recalled** | 0.0 | **8.0 (capped retrieval ceiling)** |
-| **Verified Fix Identification Rate** | 20.0% | **80.0%** |
-| **Repeat-Mistake Warning Rate** | 0.0% | **100.0%** |
+Here are the empirical results from our automated evaluation harness (`server/evaluate_agent.py --holdout`, recorded in `server/eval_results.json`):
 
-Across all tested scenarios where a past mitigation had been marked as `FAILED` (such as blindly restarting pods during a connection leak), IncidentLens explicitly warned the engineer: *"Do NOT restart pods; past incident INC-101 demonstrated that new pods exhaust the pool within 90 seconds."* In our 5-cluster pilot, verified fix accuracy reached 80.0% because we strictly docked Case 5 for omitting the exact 140 RPS circuit-breaker threshold despite identifying token caching.
+| Evaluation Metric | Arm A: Stateless LLM | Arm B: Naive Vector RAG | Arm C: IncidentLens Loop | SRE Operational Impact |
+|:---|:---:|:---:|:---:|:---|
+| **Precedents Recalled (avg)** | `0.0` | `83.7` | **`86.3`** | Grounded multi-strategy retrieval |
+| **Root Cause Accuracy** | `66.7%` | `83.3%` | **`100.0%`** | Accurate failure locus identification |
+| **Verified Fix Rate** | `50.0%` | `83.3%` | **`100.0%`** | Actionable remediation identified |
+| **Harmful Action Rate (lower=best)** | `50.0%` | `66.7%` | **`0.0%`** | Eliminates deadly trial-and-error |
+| **Warning Against Fatal Failures** | `0.0%` | `0.0%` | **`100.0%`** | Enforces acquired negative constraints |
+| **Closed Learning Loop (Before/After)** | Unsupported | Unsupported | **Verified (`/api/learning-demo`)** | Immediate negative constraint acquisition |
+| **Average Latency (ms)** | `4752ms` | `8342ms` | **`7636ms`** | Real-time interactive SRE war room |
+
+### The Critical Learning Moment
+When an engineer marks a mitigation as `FAILED` (e.g., executing a rolling restart during a connection leak), IncidentLens immediately calls `hs.retain()` to persist the outcome as an **Experience Fact**. Upon re-triaging the same or similar incident, the model actively cites the failure and issues a critical safety warning: *"DO NOT restart service pods; past incident experience demonstrated that rebooting drained the connection pool within 90 seconds."* Naive RAG, by contrast, continues to recommend the same disastrous restart because it lacks outcome weighting.
 
 ---
 
