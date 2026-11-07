@@ -115,3 +115,12 @@ def test_band_war_room_simulation_marker():
     data = res.json()
     assert data["is_simulation"] is True
     assert "Simulated" in data["platform"]
+
+
+def test_metrics_endpoint():
+    """Verify /metrics exposes valid Prometheus exposition format."""
+    res = client.get("/metrics")
+    assert res.status_code == 200
+    assert "incidentlens_service_info" in res.text
+    assert "incidentlens_upstream_health" in res.text
+    assert "incidentlens_holdout_benchmark_accuracy" in res.text
