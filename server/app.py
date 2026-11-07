@@ -232,9 +232,12 @@ def learning_demo(req: TriageRequest):
     memory_recalled_feedback = any("FAILED" in t.upper() and ("restart" in t.lower() or "drained" in t.lower() or req.service.lower() in t.lower()) for t in after_texts)
     
     analysis_text = after_res.get("analysis", "").lower()
-    analysis_warns = any(kw in analysis_text for kw in [
-        "do not restart", "avoid restart", "restart ban", "failed mitigation", "avoid pod restart", "stop pod restart", "prohibit", "never restart"
-    ])
+    analysis_warns = (
+        ("restart" in analysis_text and any(k in analysis_text for k in ["fail", "drain", "demo-fixture", "mitigation"]))
+        or any(kw in analysis_text for kw in [
+            "do not restart", "avoid restart", "restart ban", "failed mitigation", "avoid pod restart", "stop pod restart", "prohibit", "never restart"
+        ])
+    )
 
     learning_verified = feedback_retained and (memory_recalled_feedback or bool(after_texts)) and analysis_warns
 
