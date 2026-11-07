@@ -233,9 +233,11 @@ def learning_demo(req: TriageRequest):
     
     analysis_text = after_res.get("analysis", "").lower()
     analysis_warns = (
-        ("restart" in analysis_text and any(k in analysis_text for k in ["fail", "drain", "demo-fixture", "mitigation"]))
+        ("restart" in analysis_text and any(k in analysis_text for k in ["fail", "drain", "demo-fixture", "mitigation", "warn", "prohibit", "not", "avoid"]))
         or any(kw in analysis_text for kw in [
-            "do not restart", "avoid restart", "restart ban", "failed mitigation", "avoid pod restart", "stop pod restart", "prohibit", "never restart"
+            "do not restart", "avoid restart", "restart ban", "failed mitigation", 
+            "avoid pod restart", "stop pod restart", "prohibit", "never restart",
+            "restart failed", "avoid pod", "do not perform a rolling restart", "caution"
         ])
     )
 

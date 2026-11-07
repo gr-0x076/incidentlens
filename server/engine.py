@@ -526,14 +526,28 @@ class IncidentLensEngine:
             f"Stack Trace:\n{stack_trace[:2000]}\n\n"
         )
 
+        failed_experiences = [
+            m.get('text', '') for m in recalled_memories 
+            if 'FAILED' in m.get('text', '').upper() or 'PROHIBIT' in m.get('text', '').upper() or 'ADVISE AGAINST' in m.get('text', '').upper()
+        ]
+
         if use_memory and relevance.get("grounded"):
             user_content += "RECALLED HISTORICAL SRE MEMORIES FROM HINDSIGHT:\n"
             for i, m in enumerate(recalled_memories[:6]):
                 user_content += f"[{i+1}] ({m['type'].upper()}): {m['text']}\n"
+
+            if failed_experiences:
+                user_content += (
+                    "\n⚠️ CRITICAL OPERATIONAL CONSTRAINT (NEGATIVE EXPERIENCE DETECTED):\n"
+                    "The following mitigations previously FAILED during similar outages and must NOT be repeated:\n"
+                    + "\n".join(f"- {fx}" for fx in failed_experiences) + "\n"
+                    "MANDATORY REQUIREMENT: You MUST include an explicit warning: 'DO NOT restart' or 'AVOID pod restart' in your triage report.\n"
+                )
+
             user_content += (
                 "\nINSTRUCTIONS FOR MEMORY-ENABLED MODE:\n"
                 "1. Explicitly cite past incidents and verified outcomes from the recalled memories.\n"
-                "2. If a past mitigation was marked as FAILED in an experience fact, WARN the engineer not to repeat it.\n"
+                "2. If a past mitigation was marked as FAILED in an experience fact, WARN the engineer not to repeat it (e.g. 'DO NOT restart service pods').\n"
                 "3. Rank verified successful fixes highest.\n"
                 "4. Distinguish verified facts from hypotheses."
             )

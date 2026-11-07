@@ -21,12 +21,12 @@
               700: '#047857',
             },
             surface: {
-              base: '#090d16',
-              card: '#0f172a',
+              base: '#080d18',
+              card: '#0e1626',
               cardHover: '#131e35',
-              elevated: '#1e293b',
-              border: '#1e293b',
-              borderHover: '#334155',
+              elevated: '#17233d',
+              border: '#1f2e4d',
+              borderHover: '#334870',
             }
           },
           fontFamily: {
@@ -41,14 +41,14 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
     
     body {
-      background-color: #090d16;
+      background-color: #080d18;
       color: #f1f5f9;
       font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
 
     /* Custom scrollbars */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-track { background: #080d18; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
@@ -60,7 +60,8 @@
       margin-bottom: 0.5rem;
       color: #f8fafc;
     }
-    .prose-incident h3 { font-size: 0.95rem; color: #38bdf8; display: flex; align-items: center; gap: 0.5rem; }
+    .prose-incident h2 { font-size: 1.05rem; color: #f8fafc; border-bottom: 1px solid #1f2e4d; padding-bottom: 0.4rem; }
+    .prose-incident h3 { font-size: 0.925rem; color: #38bdf8; display: flex; align-items: center; gap: 0.5rem; }
     .prose-incident h4 { font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-top: 0.75rem; }
     .prose-incident p { margin-bottom: 0.6rem; line-height: 1.6; color: #cbd5e1; font-size: 0.825rem; }
     .prose-incident ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.6rem; color: #cbd5e1; font-size: 0.825rem; }
@@ -69,8 +70,8 @@
     .prose-incident strong { color: #f8fafc; font-weight: 600; }
     .prose-incident code {
       font-family: 'JetBrains Mono', monospace;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(51, 65, 85, 0.6);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(51, 65, 85, 0.7);
       padding: 0.15rem 0.35rem;
       border-radius: 0.25rem;
       font-size: 0.75rem;
@@ -78,11 +79,12 @@
     }
     .prose-incident pre {
       background: #020617;
-      border: 1px solid #1e293b;
+      border: 1px solid #1f2e4d;
       padding: 0.75rem;
       border-radius: 0.5rem;
       overflow-x: auto;
       margin: 0.75rem 0;
+      position: relative;
     }
     .prose-incident pre code {
       background: transparent;
@@ -93,7 +95,7 @@
     }
     .prose-incident blockquote {
       border-left: 3px solid #f59e0b;
-      background: rgba(245, 158, 11, 0.05);
+      background: rgba(245, 158, 11, 0.08);
       border-radius: 0 0.375rem 0.375rem 0;
       padding: 0.5rem 0.75rem;
       margin: 0.75rem 0;
@@ -108,21 +110,20 @@
       font-family: 'JetBrains Mono', monospace;
     }
     .prose-incident th {
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: #0e1626;
+      border: 1px solid #334870;
       padding: 0.4rem 0.6rem;
       text-align: left;
       color: #38bdf8;
       font-weight: 600;
     }
     .prose-incident td {
-      border: 1px solid #1e293b;
+      border: 1px solid #1f2e4d;
       padding: 0.35rem 0.6rem;
       color: #cbd5e1;
     }
-    .prose-incident tr:nth-child(even) { background: rgba(15, 23, 42, 0.5); }
+    .prose-incident tr:nth-child(even) { background: rgba(14, 22, 38, 0.5); }
     
-    /* Subtle pulse animation for active badges */
     @keyframes live-ping {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.4); opacity: 0.4; }
@@ -134,60 +135,64 @@
 <body class="min-h-screen flex flex-col font-sans antialiased text-slate-100">
 
   <!-- Enterprise Top Navigation Bar -->
-  <header class="border-b border-surface-border bg-surface-card/90 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-[1520px] mx-auto px-4 lg:px-6 h-14 flex items-center justify-between">
+  <header class="border-b border-surface-border bg-surface-card/95 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-[1560px] mx-auto px-4 lg:px-6 h-14 flex items-center justify-between">
       
-      <!-- Brand & Status -->
+      <!-- Brand & Live Upstream Status Probes -->
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-sm">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-sm">
             <i data-lucide="shield-alert" class="w-4 h-4"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
               <span class="font-bold tracking-tight text-white text-sm">IncidentLens</span>
-              <span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">MEMORY ACTIVE</span>
+              <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">v1.2.0</span>
             </div>
           </div>
         </div>
 
+        <!-- Live Diagnostics Chips (Polled from /api/health) -->
         <div class="hidden md:flex items-center gap-2 text-xs text-slate-400 pl-4 border-l border-surface-border">
-          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-elevated text-slate-300 font-mono text-[11px] border border-surface-border">
+          <div id="hsHealthChip" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-elevated text-slate-300 font-mono text-[11px] border border-surface-border transition-colors">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-live"></span>
-            Hindsight Cloud
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-elevated text-slate-300 font-mono text-[11px] border border-surface-border">
+            <span id="hsHealthText">Hindsight Cloud</span>
+          </div>
+          <div id="groqHealthChip" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-elevated text-slate-300 font-mono text-[11px] border border-surface-border transition-colors">
             <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-            Groq LPU (120B)
+            <span id="groqHealthText">Groq LPU (GPT-OSS-120B)</span>
+          </div>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
+            Bank: incidentlens-sre-bank
           </span>
         </div>
       </div>
 
       <!-- Action Center -->
       <div class="flex items-center gap-2 sm:gap-2.5 text-xs">
-        <button onclick="openBenchmarkModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface-elevated hover:bg-slate-700/60 border border-surface-border text-slate-200 transition-colors cursor-pointer">
+        <button onclick="openBenchmarkModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface-elevated hover:bg-slate-700/60 border border-surface-border text-slate-200 transition-colors cursor-pointer" title="View 3-Arm Empirical Evaluation on 6 Held-Out Scenarios">
           <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span class="font-medium">Benchmark</span>
+          <span class="font-medium">Holdout Benchmark</span>
         </button>
 
-        <button onclick="openReflectModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 transition-colors cursor-pointer">
+        <button onclick="runCompare()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface-elevated hover:bg-slate-700/60 border border-surface-border text-sky-300 font-medium transition-colors cursor-pointer" title="Run parallel Stateless vs Memory triage comparison">
+          <i data-lucide="split" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span>Head-to-Head</span>
+        </button>
+
+        <button id="learningDemoBtn" onclick="runLearningDemo()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-medium transition-colors cursor-pointer shadow-sm shadow-emerald-950/30" title="Demonstrates live 3-step Before vs After closed learning loop">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Learning Demo</span>
+        </button>
+
+        <button onclick="openReflectModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 transition-colors cursor-pointer" title="Hindsight reflect() agentic loop for cross-service policy divergence">
           <i data-lucide="git-merge" class="w-3.5 h-3.5"></i>
           <span class="font-medium">Policy Reflection</span>
         </button>
 
-        <button onclick="openBandModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 transition-colors cursor-pointer">
+        <button onclick="openBandModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 transition-colors cursor-pointer" title="Multi-agent incident collaboration bridge">
           <i data-lucide="users" class="w-3.5 h-3.5"></i>
           <span class="font-medium">Band War Room</span>
-        </button>
-
-        <button onclick="runCompare()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sky-300 font-medium transition-colors cursor-pointer">
-          <i data-lucide="split" class="w-3.5 h-3.5"></i>
-          <span>Head-to-Head</span>
-        </button>
-
-        <button id="learningDemoBtn" onclick="runLearningDemo()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-medium transition-colors cursor-pointer" title="Demonstrates before vs after learning loop">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>Learning Demo</span>
         </button>
 
         <a href="/metrics" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-surface-elevated hover:bg-slate-700/60 border border-surface-border text-slate-300 transition-colors" title="View Prometheus Cluster Metrics">
@@ -199,55 +204,48 @@
     </div>
   </header>
 
-  <!-- Scenario Quick-Switch Bar (All 20 Incidents across 5 Failure Clusters) -->
+  <!-- Dataset Scope & Quick-Switch Selector -->
   <section class="border-b border-surface-border bg-surface-base px-4 lg:px-6 py-2.5">
-    <div class="max-w-[1520px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+    <div class="max-w-[1560px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
       
-      <!-- Cluster Selector Filter -->
-      <div class="flex items-center gap-2 text-xs text-slate-400 shrink-0">
-        <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
-        <span class="font-medium text-[11px] uppercase tracking-wider hidden sm:inline">Clusters:</span>
-        <select id="clusterFilter" onchange="onClusterFilterChange(this.value)" class="bg-surface-elevated border border-surface-border text-slate-200 text-xs rounded-lg px-2.5 py-1 font-mono focus:outline-none focus:border-emerald-500 cursor-pointer">
-          <option value="all">⚡ All 20 Incidents (5 Clusters)</option>
-          <option value="1">Cluster 1: Redis Pool Leaks (INC-101 to 104)</option>
-          <option value="2">Cluster 2: Postgres Deadlocks (INC-201 to 204)</option>
-          <option value="3">Cluster 3: Aurora Stale DNS & JVM Cache (INC-301 to 304)</option>
-          <option value="4">Cluster 4: Kafka Rebalance Storms (INC-401 to 404)</option>
-          <option value="5">Cluster 5: Bank API Throttling & 429s (INC-501 to 504)</option>
-        </select>
+      <!-- Dataset Mode Tabs & Cluster Filter -->
+      <div class="flex items-center gap-3 shrink-0 flex-wrap">
+        <!-- Dataset Tab Switcher (Catalog vs Holdout) -->
+        <div class="inline-flex p-0.5 rounded-lg bg-surface-card border border-surface-border text-xs font-mono">
+          <button id="tabCatalogBtn" onclick="switchDatasetScope('catalog')" class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 font-bold transition-all cursor-pointer">
+            Catalog Precedents (20)
+          </button>
+          <button id="tabHoldoutBtn" onclick="switchDatasetScope('holdout')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition-all cursor-pointer">
+            Generalization Holdouts (6)
+          </button>
+        </div>
+
+        <!-- Cluster Selector Dropdown (for Catalog mode) -->
+        <div id="clusterDropdownWrapper" class="flex items-center gap-2 text-xs text-slate-400">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
+          <select id="clusterFilter" onchange="onClusterFilterChange(this.value)" class="bg-surface-elevated border border-surface-border text-slate-200 text-xs rounded-lg px-2.5 py-1 font-mono focus:outline-none focus:border-emerald-500 cursor-pointer">
+            <option value="all">⚡ All 5 Failure Clusters</option>
+            <option value="1">Cluster 1: Redis Pool Starvation (INC-101 to 104)</option>
+            <option value="2">Cluster 2: Postgres Deadlocks (INC-201 to 204)</option>
+            <option value="3">Cluster 3: Aurora Replica Lag & JVM DNS (INC-301 to 304)</option>
+            <option value="4">Cluster 4: Kafka Rebalance Storms (INC-401 to 404)</option>
+            <option value="5">Cluster 5: Bank Rate-Limit 429 Cascades (INC-501 to 504)</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Dynamic Pill Bar (All 20 Incidents) -->
+      <!-- Interactive Scenario Pill Scroller -->
       <div id="scenarioPills" class="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
-        <button onclick="selectIncidentById('INC-101')" id="pill-INC-101" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span class="font-bold text-white">INC-101</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-102')" id="pill-INC-102" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-102</span><span class="text-slate-400 hidden sm:inline">[auth-service]</span></button>
-        <button onclick="selectIncidentById('INC-103')" id="pill-INC-103" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-103</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
-        <button onclick="selectIncidentById('INC-104')" id="pill-INC-104" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-104</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-201')" id="pill-INC-201" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-201</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
-        <button onclick="selectIncidentById('INC-202')" id="pill-INC-202" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-202</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
-        <button onclick="selectIncidentById('INC-203')" id="pill-INC-203" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-203</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
-        <button onclick="selectIncidentById('INC-204')" id="pill-INC-204" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-204</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
-        <button onclick="selectIncidentById('INC-301')" id="pill-INC-301" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-301</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-302')" id="pill-INC-302" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-302</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
-        <button onclick="selectIncidentById('INC-303')" id="pill-INC-303" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-303</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-304')" id="pill-INC-304" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-304</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
-        <button onclick="selectIncidentById('INC-401')" id="pill-INC-401" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-401</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-402')" id="pill-INC-402" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-402</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
-        <button onclick="selectIncidentById('INC-403')" id="pill-INC-403" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-403</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-404')" id="pill-INC-404" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-404</span><span class="text-slate-400 hidden sm:inline">[inventory-service]</span></button>
-        <button onclick="selectIncidentById('INC-501')" id="pill-INC-501" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-501</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-502')" id="pill-INC-502" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-502</span><span class="text-slate-400 hidden sm:inline">[checkout-api]</span></button>
-        <button onclick="selectIncidentById('INC-503')" id="pill-INC-503" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-503</span><span class="text-slate-400 hidden sm:inline">[payment-gw]</span></button>
-        <button onclick="selectIncidentById('INC-504')" id="pill-INC-504" class="scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="font-bold text-white">INC-504</span><span class="text-slate-400 hidden sm:inline">[auth-service]</span></button>
+        <!-- Dynamically rendered via renderScenarioPills() -->
       </div>
 
     </div>
   </section>
 
   <!-- Main Multi-Column SRE Workspace -->
-  <main class="max-w-[1520px] w-full mx-auto p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+  <main class="max-w-[1560px] w-full mx-auto p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-    <!-- Left Column: Active Alert & Incident Telemetry (5 cols) -->
+    <!-- Left Column: Active Alert, Telemetry & Closed Feedback Loop (5 cols) -->
     <div class="lg:col-span-5 space-y-4 flex flex-col">
       
       <!-- Incident Detail Card -->
@@ -255,38 +253,16 @@
         
         <div class="flex items-center justify-between gap-2 flex-wrap">
           <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-mono font-bold tracking-wide">P1 CRITICAL</span>
+            <span id="activeSeverityBadge" class="px-2 py-0.5 rounded bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-mono font-bold tracking-wide">P1 CRITICAL</span>
             <span id="activeIncidentBadge" class="px-2 py-0.5 rounded bg-surface-elevated text-slate-300 text-[11px] font-mono border border-surface-border">INC-101</span>
+            <span id="datasetScopeTag" class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 text-[10px] font-mono border border-blue-500/30">SEEDED CATALOG</span>
           </div>
 
-          <!-- Direct Quick-Jump Dropdown to any of the 20 incidents -->
+          <!-- Direct Quick-Jump Dropdown -->
           <div class="flex items-center gap-2">
-            <select id="incidentDropdownSelect" onchange="onDropdownSelect(this.value)" class="bg-surface-base border border-surface-border text-xs rounded-lg px-2.5 py-1 text-slate-200 font-mono focus:outline-none focus:border-emerald-500 max-w-[240px] truncate cursor-pointer">
-              <option value="INC-101" selected>[INC-101] payment-gw: Payment gateway HTTP 502 with JedisC...</option>
-              <option value="INC-102">[INC-102] auth-service: JWT validation latency degradation a...</option>
-              <option value="INC-103">[INC-103] checkout-api: Checkout ingress dropping requests: ...</option>
-              <option value="INC-104">[INC-104] payment-gw: Payment-gw Redis connection pool exh...</option>
-              <option value="INC-201">[INC-201] inventory-service: Postgres deadlock detected during co...</option>
-              <option value="INC-202">[INC-202] inventory-service: Lock wait timeout exceeded on wareho...</option>
-              <option value="INC-203">[INC-203] checkout-api: Postgres active connection pool satu...</option>
-              <option value="INC-204">[INC-204] inventory-service: Deadlock in stock decrement on flash...</option>
-              <option value="INC-301">[INC-301] payment-gw: Payment-gw connecting to old RDS rep...</option>
-              <option value="INC-302">[INC-302] checkout-api: Checkout-api CoreDNS lookup timeout ...</option>
-              <option value="INC-303">[INC-303] payment-gw: Payment-gw ReadOnlySQLException foll...</option>
-              <option value="INC-304">[INC-304] inventory-service: Stale DNS resolution to read replica...</option>
-              <option value="INC-401">[INC-401] payment-gw: Kafka consumer group rebalance loop ...</option>
-              <option value="INC-402">[INC-402] checkout-api: Order event consumer pod crash loop ...</option>
-              <option value="INC-403">[INC-403] payment-gw: Payment consumer group evicted durin...</option>
-              <option value="INC-404">[INC-404] inventory-service: Inventory sync consumer lag growing ...</option>
-              <option value="INC-501">[INC-501] payment-gw: Bank upstream HTTP 429 throttling ca...</option>
-              <option value="INC-502">[INC-502] checkout-api: Checkout-api goroutine leak on hung ...</option>
-              <option value="INC-503">[INC-503] payment-gw: Payment provider 429 cascade recurri...</option>
-              <option value="INC-504">[INC-504] auth-service: Cross-service policy conflict: Threa...</option>
+            <select id="incidentDropdownSelect" onchange="onDropdownSelect(this.value)" class="bg-surface-base border border-surface-border text-xs rounded-lg px-2.5 py-1 text-slate-200 font-mono focus:outline-none focus:border-emerald-500 max-w-[220px] truncate cursor-pointer">
+              <!-- Dynamically populated -->
             </select>
-            <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1 shrink-0">
-              <i data-lucide="clock" class="w-3 h-3 text-slate-500"></i>
-              SESSION LIVE
-            </span>
           </div>
         </div>
 
@@ -306,14 +282,14 @@
 
           <div>
             <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Symptoms & Deployment Context</label>
-            <textarea id="symptomsInput" rows="2" class="w-full bg-surface-base border border-surface-border rounded-lg p-2.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500 font-mono leading-relaxed transition-colors">Spike in 502 Bad Gateway responses during checkout. Upstream latency jumped from 45ms to 12,000ms. Error logs show JedisConnectionException. auth-service canary deploy v2.4.1 completed 45 minutes prior.</textarea>
+            <textarea id="symptomsInput" rows="3" class="w-full bg-surface-base border border-surface-border rounded-lg p-2.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500 font-mono leading-relaxed transition-colors">Spike in 502 Bad Gateway responses during checkout. Upstream latency jumped from 45ms to 12,000ms. Error logs show JedisConnectionException. auth-service canary deploy v2.4.1 completed 45 minutes prior.</textarea>
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-1">
               <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Raw Stack Trace</label>
-              <button onclick="copyStackTrace()" class="text-[10px] text-slate-400 hover:text-slate-200 font-mono flex items-center gap-1 transition-colors">
-                <i data-lucide="copy" class="w-3 h-3"></i> Copy
+              <button onclick="copyStackTrace()" class="text-[10px] text-slate-400 hover:text-slate-200 font-mono flex items-center gap-1 transition-colors cursor-pointer">
+                <i data-lucide="copy" class="w-3 h-3"></i> Copy Trace
               </button>
             </div>
             <textarea id="stackTraceInput" rows="4" class="w-full bg-surface-base border border-surface-border rounded-lg p-2.5 text-[11px] text-rose-300/90 focus:outline-none focus:border-emerald-500 font-mono leading-tight whitespace-pre transition-colors">redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
@@ -354,11 +330,11 @@
         </div>
 
         <p class="text-xs text-slate-400 leading-relaxed">
-          Validate live remediation outcomes. Marking results retains them into Hindsight as <span class="text-emerald-400 font-mono">Experience Facts</span> to prevent repeating failures:
+          Record human-verified remediation outcomes. Logging a failure retains an <span class="text-rose-400 font-mono">Experience Fact</span> to immediately acquire a negative operational constraint:
         </p>
 
         <div class="space-y-2">
-          <input id="feedbackActionInput" type="text" placeholder="Mitigation applied (e.g. Rolled back auth-service to v2.4.0)" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 font-mono transition-colors">
+          <input id="feedbackActionInput" type="text" placeholder="Mitigation applied (e.g. Restarted service pods)" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500 font-mono transition-colors">
           
           <div class="grid grid-cols-2 gap-2">
             <button onclick="submitFeedback('WORKED')" class="px-3 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors">
@@ -373,6 +349,12 @@
         </div>
 
         <div id="feedbackStatus" class="min-h-[16px] text-[11px] font-mono text-center"></div>
+        <div id="reTriagePrompt" class="hidden text-center pt-1">
+          <button onclick="runTriage()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold cursor-pointer transition-all">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Re-Triage Now to Verify Acquired Constraint</span>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -390,155 +372,40 @@
             </div>
             <h2 class="text-xs font-bold uppercase tracking-wider text-slate-200">Root Cause & Remediation Proposal</h2>
           </div>
-          <span id="triageModeBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">MEMORY GROUNDED</span>
+          <span id="triageModeBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">READY FOR TRIAGE</span>
         </div>
 
-        <!-- Markdown Triage Content Container (Pre-rendered for INC-101) -->
+        <!-- Dynamic Markdown Triage Content Container -->
         <div id="triageOutput" class="prose-incident flex-1 overflow-y-auto max-h-[580px] pr-2">
-          <h2>📋 Incident Triage – payment-gw</h2>
-<p><strong>Title:</strong> Payment gateway HTTP 502 with JedisConnectionException<br />
-<strong>Detected:</strong> 2026-11-07 ≈ 09:12 UTC | <strong>Current Severity:</strong> <strong>P1 CRITICAL</strong>  </p>
-<hr />
-<h3>⚠️ Critical Warning (Learned Negative Constraint)</h3>
-<blockquote>
-<p><strong>DO NOT restart <code>payment-gw</code> pods.</strong> Past incident <strong>INC-101</strong> and <strong>INC-104</strong> recorded that restarting pods during connection pool exhaustion triggers an immediate reconnection storm that overwhelms Redis and increases 502 rates.</p>
-</blockquote>
-<hr />
-<h3>1️⃣ Situation Overview (Telemetry &amp; Memory Fusion)</h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Metric / Telemetry</th>
-<th style="text-align: center;">Current Value</th>
-<th style="text-align: center;">Baseline / Threshold</th>
-<th style="text-align: center;">Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>HTTP 502 Bad Gateway Rate</strong></td>
-<td style="text-align: center;"><strong>15.4%</strong> of checkout traffic</td>
-<td style="text-align: center;">&lt; 0.1%</td>
-<td style="text-align: center;">🚨 CRITICAL SPIKE</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Upstream P99 Latency (Redis)</strong></td>
-<td style="text-align: center;"><strong>12,000 ms</strong></td>
-<td style="text-align: center;">45 ms</td>
-<td style="text-align: center;">🚨 SEVERE STALL</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Error Log Signature</strong></td>
-<td style="text-align: center;"><code>JedisConnectionException: Could not get a resource from the pool</code></td>
-<td style="text-align: center;">None</td>
-<td style="text-align: center;">Active Exhaustion</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Recent Deployment</strong></td>
-<td style="text-align: center;"><code>auth-service</code> canary <code>v2.4.1</code> deployed 45m ago</td>
-<td style="text-align: center;"><code>v2.4.0</code></td>
-<td style="text-align: center;">Suspicious Trigger</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>Cited Hindsight Precedents:</strong><br />
-• <strong>INC-101 (2026-09-12):</strong> Identical symptoms caused by unclosed Jedis connection leases in auth-service canary.<br />
-• <strong>INC-104 (2026-10-02):</strong> Redis connection pool exhaustion mitigated by canary rollback and pool scaling.</p>
-</blockquote>
-<hr />
-<h3>2️⃣ Root Cause Identification</h3>
-<p>The root cause is <strong>Redis connection pool starvation</strong> on <code>payment-gw</code> triggered by unclosed socket leases from the newly deployed <code>auth-service</code> canary <code>v2.4.1</code>. The local pool size (50) is saturated by leaked sockets that never return to idle state, causing all subsequent checkout requests to block until timing out at 12,000ms.</p>
-<hr />
-<h3>3️⃣ Verified Remediation Sequence (Ranked by Historical Validation)</h3>
-<ol>
-<li><strong>Rollback Canary Deployment (Verified Fix):</strong><br />
-   Roll back <code>auth-service</code> from <code>v2.4.1</code> to <code>v2.4.0</code> immediately to stop upstream socket lease leaks.<br />
-<code>bash
-   kubectl rollout undo deployment/auth-service -n production</code></li>
-<li><strong>Expand Connection Pool Capacity:</strong><br />
-   Temporarily increase <code>jedis.pool.maxTotal</code> from 50 to 200 to clear in-flight checkout backlogs.<br />
-<code>bash
-   kubectl set env deployment/payment-gw JEDIS_POOL_MAX_TOTAL=200 -n production</code></li>
-<li><strong>Verify Connection Recovery:</strong><br />
-   Confirm <code>jedis_pool_active</code> drops below 20 and HTTP 502 rates return to zero:<br />
-<code>bash
-   curl -s http://payment-gw.internal/metrics | grep jedis_pool</code></li>
-</ol>
+          <!-- Dynamic Content rendered by runTriage() or initial loader -->
         </div>
 
       </div>
 
       <!-- Memory Evidence Drawer: Cited Historical Precedents -->
-      <div class="bg-surface-card border border-surface-border rounded-xl p-5 shadow-sm">
+      <div class="bg-surface-card border border-surface-border rounded-xl p-5 shadow-sm space-y-3">
         
-        <div class="flex items-center justify-between pb-2 mb-3 border-b border-surface-border">
+        <div class="flex items-center justify-between pb-2 border-b border-surface-border flex-wrap gap-2">
           <div class="flex items-center gap-2">
             <div class="w-6 h-6 rounded bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
               <i data-lucide="database" class="w-3.5 h-3.5"></i>
             </div>
             <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Hindsight Memory Evidence Drawer</span>
           </div>
-          <span id="memoriesCount" class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-elevated text-purple-300 border border-purple-500/20">8 precedents cited (top-ranked)</span>
+
+          <!-- Memory Filter Pills -->
+          <div class="flex items-center gap-1.5 text-[10px] font-mono">
+            <button onclick="filterMemories('all')" id="memFilter-all" class="px-2 py-0.5 rounded bg-surface-elevated text-white border border-surface-border">ALL</button>
+            <button onclick="filterMemories('world')" id="memFilter-world" class="px-2 py-0.5 rounded text-slate-400 hover:text-white">WORLD</button>
+            <button onclick="filterMemories('experience')" id="memFilter-experience" class="px-2 py-0.5 rounded text-slate-400 hover:text-white">EXPERIENCE</button>
+            <button onclick="filterMemories('observation')" id="memFilter-observation" class="px-2 py-0.5 rounded text-slate-400 hover:text-white">OBSERVATIONS</button>
+          </div>
+
+          <span id="memoriesCount" class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-elevated text-purple-300 border border-purple-500/20">0 precedents cited</span>
         </div>
 
-        <div id="memoryList" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 100%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 occurred on payment-gw service, causing a spike in 502 Bad Gateway errors and upstream latency increase from 45ms to 12,000ms. | When: 2026-09-12 | Where: payment-gw service | JedisConnectionException due to Redis connection pool exhaustion.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 99%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 occurred on the payment-gw service, causing a spike in 502 Bad Gateway errors during checkout. | When: 2026-09-12 | Where: payment-gw service | Upstream latency increased from 45ms to 12,000ms due to Redis connection pool exhaustion.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 99%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 was caused by JedisConnectionException due to Redis connection pool exhaustion.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Upstream latency increased from 45ms to 12,000ms due to Redis connection pool exhaustion.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 caused a spike in 502 Bad Gateway errors during checkout.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-purple-500/15 text-purple-300 border-purple-500/30 uppercase font-bold">OBSERVATION</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 98%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-101 caused a spike in 502 Bad Gateway errors.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-blue-500/15 text-blue-300 border-blue-500/30 uppercase font-bold">WORLD</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 97%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-104 occurred on the payment-gw service due to Redis connection pool exhaustion during a flash sale traffic spike. | When: 2026-10-02 | Where: payment-gw service | Redis connection pool size was fixed at 50, which was insufficient for a 3x traffic burst.</p>
-</div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
-  <div class="flex items-center justify-between">
-    <span class="font-mono text-[10px] px-2 py-0.5 rounded border bg-emerald-500/15 text-emerald-300 border-emerald-500/30 uppercase font-bold">EXPERIENCE</span>
-    <span class="text-[11px] font-mono text-slate-400">Match: 97%</span>
-  </div>
-  <p class="text-slate-300 leading-relaxed font-mono text-[11px]">Incident INC-104 mitigation outcome recorded: WORKED: Rollback auth-service canary to v2.4.0 and scale Jedis maxTotal to 200. FAILED: Restart payment-gw pods (reconnect storm exhausted pool immediately).</p>
-</div>
+        <div id="memoryList" class="space-y-2 max-h-[240px] overflow-y-auto pr-1">
+          <!-- Populated by renderMemories() -->
         </div>
 
       </div>
@@ -558,7 +425,7 @@
           </div>
           <div>
             <h3 class="text-sm font-bold text-white">Head-to-Head: Stateless Baseline vs. IncidentLens Memory Loop</h3>
-            <p class="text-xs text-slate-400">Observing how episodic memory eliminates repeat mistakes during active P1 outages</p>
+            <p class="text-xs text-slate-400">Live parallel evaluation proving how episodic memory eliminates repeat mistakes during active P1 outages</p>
           </div>
         </div>
         <button onclick="closeCompareModal()" class="w-8 h-8 rounded-lg hover:bg-surface-elevated flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
@@ -575,19 +442,19 @@
               <span class="w-2 h-2 rounded-full bg-rose-400"></span>
               <span class="text-xs font-bold text-slate-300">Stateless LLM (Zero Memory)</span>
             </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">0 Precedents Cited</span>
+            <span id="compareStatelessBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">0 Precedents Cited</span>
           </div>
           <div id="statelessCompareContent" class="prose-incident flex-1 overflow-y-auto text-xs pr-1"></div>
         </div>
 
-        <!-- IncidentLens Column -->
-        <div class="bg-surface-base border border-emerald-500/20 rounded-xl p-5 flex flex-col">
-          <div class="flex items-center justify-between pb-3 mb-3 border-b border-emerald-500/20">
+        <!-- IncidentLens Memory Column -->
+        <div class="bg-surface-base border border-surface-border rounded-xl p-5 flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-surface-border">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span class="text-xs font-bold text-emerald-300">IncidentLens (Closed Feedback Loop)</span>
+              <span class="text-xs font-bold text-white">IncidentLens (Closed Feedback Loop)</span>
             </div>
-            <span id="compareMemoryBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">100+ Precedents Recalled</span>
+            <span id="compareMemoryBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Precedents Cited</span>
           </div>
           <div id="memoryCompareContent" class="prose-incident flex-1 overflow-y-auto text-xs pr-1"></div>
         </div>
@@ -597,9 +464,9 @@
     </div>
   </div>
 
-  <!-- MODAL 2: Policy Reflection (reflect() cross-service conflicts) -->
+  <!-- MODAL 2: Cross-Service Policy Reflection Modal -->
   <div id="reflectModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-surface-card border border-surface-border rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div class="bg-surface-card border border-surface-border rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       
       <div class="p-4 px-6 border-b border-surface-border flex items-center justify-between bg-surface-card">
         <div class="flex items-center gap-3">
@@ -607,8 +474,8 @@
             <i data-lucide="git-merge" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-white">Hindsight Agentic Conflict Reflection (<code class="font-mono text-purple-400">reflect()</code>)</h3>
-            <p class="text-xs text-slate-400">Test autonomous reflection over cross-service policy divergence (e.g. thread pool scaling)</p>
+            <h3 class="text-sm font-bold text-white">Hindsight Agentic Conflict Reflection (<code>reflect()</code>)</h3>
+            <p class="text-xs text-slate-400">Autonomous reflection loop resolving cross-service architectural divergence</p>
           </div>
         </div>
         <button onclick="closeReflectModal()" class="w-8 h-8 rounded-lg hover:bg-surface-elevated flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
@@ -617,34 +484,35 @@
       </div>
 
       <div class="p-6 space-y-4 overflow-y-auto flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Test Hindsight's autonomous reflection loop over cross-service policy divergence (e.g. why increasing worker threads works on FastAPI but deadlocks Spring Boot):
+        </p>
+
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Service A (Baseline Success)</label>
-            <input id="reflectServiceA" type="text" value="inventory-service" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-emerald-400 focus:outline-none">
+            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Service A</label>
+            <input id="reflectServiceA" type="text" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-emerald-400 focus:outline-none" value="inventory-service">
           </div>
           <div>
-            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Service B (Conflicting Architecture)</label>
-            <input id="reflectServiceB" type="text" value="payment-gw" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-rose-400 focus:outline-none">
+            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Service B</label>
+            <input id="reflectServiceB" type="text" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-rose-400 focus:outline-none" value="payment-gw">
           </div>
         </div>
 
         <div>
-          <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Remediation Policy / Mitigation Action</label>
-          <input id="reflectAction" type="text" value="Increase worker thread pool size" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none">
+          <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Mitigation Action / Policy</label>
+          <input id="reflectAction" type="text" class="w-full bg-surface-base border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none" value="Increase worker thread pool size">
         </div>
 
-        <button id="reflectBtn" onclick="runReflection()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-950/40">
+        <button id="reflectBtn" onclick="runReflection()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-950/40">
           <i data-lucide="sparkles" class="w-4 h-4"></i>
           <span>Execute Cross-Service Reflection</span>
         </button>
 
-        <div class="border border-surface-border bg-surface-base rounded-xl p-4 min-h-[160px]">
-          <h4 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-            <i data-lucide="activity" class="w-3.5 h-3.5 text-purple-400"></i>
-            Reflection Synthesis Output
-          </h4>
-          <div id="reflectOutput" class="prose-incident text-xs">
-            <p class="text-slate-500 italic">Click execute above to run Hindsight's autonomous reflection over cross-service experience facts.</p>
+        <div class="pt-2">
+          <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Reflection Analysis Output</label>
+          <div id="reflectOutput" class="prose-incident p-4 bg-surface-base border border-surface-border rounded-xl min-h-[140px] text-xs">
+            <span class="text-slate-500 italic">Click Execute to run Hindsight's reflect() loop across microservices...</span>
           </div>
         </div>
       </div>
@@ -662,8 +530,11 @@
             <i data-lucide="radio" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-white">Band AI Desktop Collaboration War Room</h3>
-            <p class="text-xs text-slate-400">Multi-agent peer mesh coordinating live with SRE on-call engineers</p>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-bold text-white">Band AI Desktop Collaboration War Room</h3>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">SIMULATION PREVIEW</span>
+            </div>
+            <p class="text-xs text-slate-400">Multi-agent incident session protocol bridging SRE on-call engineers</p>
           </div>
         </div>
         <button onclick="closeBandModal()" class="w-8 h-8 rounded-lg hover:bg-surface-elevated flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
@@ -671,7 +542,7 @@
         </button>
       </div>
 
-      <div class="p-6 space-y-4 overflow-y-auto flex-1">
+      <div class="p-6 space-y-4 overflow-y-auto flex-1 font-sans text-xs">
         <div class="p-4 bg-surface-base border border-surface-border rounded-xl space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="text-slate-400">Active War Room Channel:</span>
@@ -679,47 +550,25 @@
           </div>
           <div class="flex items-center justify-between text-xs">
             <span class="text-slate-400">Mesh Protocol:</span>
-            <span class="font-mono text-emerald-400">band://desktop/v1.0</span>
+            <span class="font-mono text-emerald-400">band://desktop/v1.0 (Simulated Preview)</span>
           </div>
         </div>
 
-        <div class="space-y-3 font-mono text-xs">
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-indigo-300">@IncidentLens-Bot</span>
-              <span>12:04:15 PM</span>
-            </div>
-            <p class="text-slate-200">🚨 P1 Outage detected on payment-gw. Recalled INC-101 (96% match). Proposing auth-service canary rollback.</p>
-          </div>
-
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-emerald-300">@SRE-OnCall</span>
-              <span>12:04:42 PM</span>
-            </div>
-            <p class="text-slate-200">Executing auth-service rollback now. Acknowledging warning against pod restarts.</p>
-          </div>
-
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-indigo-300">@IncidentLens-Bot</span>
-              <span>12:05:10 PM</span>
-            </div>
-            <p class="text-emerald-400">✓ Rollback complete. Redis pool latency stabilized at 32ms. Marked outcome WORKED in Hindsight memory bank.</p>
-          </div>
+        <div id="bandMessageContainer" class="space-y-3 font-mono text-xs">
+          <!-- Dynamically generated for active incident -->
         </div>
 
-        <div class="pt-2">
-          <p class="text-[11px] text-slate-400 leading-relaxed">
-            Run <code class="font-mono text-indigo-300">.\band\incident_war_room.ps1 -IncidentId INC-101</code> to bridge this session into the native Band Desktop CLI.
-          </p>
+        <div class="p-3 bg-indigo-500/5 border border-indigo-500/20 rounded-xl space-y-1 text-slate-400 text-[11px]">
+          <span class="font-bold text-indigo-300 block">Desktop Terminal Coordinator</span>
+          <p>Execute locally in PowerShell or Bash to coordinate via the Band CLI:</p>
+          <code id="bandCliCommand" class="block font-mono text-indigo-300 bg-surface-base p-2 rounded border border-surface-border mt-1">.\band\incident_war_room.ps1 -IncidentId INC-101 -Service payment-gw</code>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- MODAL 4: Benchmark Modal -->
+  <!-- MODAL 4: Holdout Benchmark Modal -->
   <div id="benchmarkModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-surface-card border border-surface-border rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       
@@ -746,30 +595,109 @@
   </div>
 
   <script>
-    let incidentsData = [];
+    let catalogIncidents = [];
+    let holdoutIncidents = [];
+    let activeScope = 'catalog'; // 'catalog' or 'holdout'
     let currentSelectedId = "INC-101";
+    let activeMemories = [];
+    let currentMemoryFilter = 'all';
 
     async function init() {
       lucide.createIcons();
+      await fetchHealthStatus();
+      await loadAllDatasets();
+    }
+
+    async function fetchHealthStatus() {
       try {
-        const resp = await fetch('/api/incidents');
-        const res = await resp.json();
-        incidentsData = Array.isArray(res) ? res : (res.incidents || []);
+        const resp = await fetch('/api/health');
+        if (!resp.ok) return;
+        const data = await resp.json();
+        
+        // Update Hindsight status chip
+        const hsText = document.getElementById('hsHealthText');
+        const hsChip = document.getElementById('hsHealthChip');
+        if (data.hindsight && data.hindsight.connected) {
+          hsText.innerText = `Hindsight Cloud (${data.hindsight.latency_ms || 120}ms)`;
+          hsChip.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 font-mono text-[11px] border border-emerald-500/30 transition-colors";
+        } else {
+          hsText.innerText = "Hindsight (Degraded)";
+          hsChip.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 font-mono text-[11px] border border-amber-500/30 transition-colors";
+        }
+
+        // Update Groq status chip
+        const groqText = document.getElementById('groqHealthText');
+        const groqChip = document.getElementById('groqHealthChip');
+        if (data.groq && data.groq.connected) {
+          const mName = data.groq.model.includes('120b') ? '120B' : '70B';
+          groqText.innerText = `Groq LPU (${mName})`;
+          groqChip.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 font-mono text-[11px] border border-cyan-500/30 transition-colors";
+        }
+      } catch (e) {
+        console.warn("Health check poll error:", e);
+      }
+    }
+
+    async function loadAllDatasets() {
+      try {
+        // 1. Fetch Catalog (20 incidents)
+        const respCat = await fetch('/api/incidents');
+        const resCat = await respCat.json();
+        catalogIncidents = Array.isArray(resCat) ? resCat : (resCat.incidents || []);
+
+        // 2. Fetch Holdouts (6 incidents)
+        const respHold = await fetch('/api/holdouts');
+        const resHold = await respHold.json();
+        holdoutIncidents = Array.isArray(resHold) ? resHold : (resHold.holdouts || []);
+
+        // Render scenario list for current scope
         populateIncidentDropdown();
         renderScenarioPills('all');
-        if (incidentsData.length > 0) {
-          // Pre-rendered for INC-101; data loaded for dynamic interactions
-          console.log("[IncidentLens] Initialized with", incidentsData.length, "scenarios.");
+        
+        // Select first incident and render clean initial state
+        if (catalogIncidents.length > 0) {
+          selectIncidentById(catalogIncidents[0].id);
         }
       } catch (err) {
-        console.error("Failed to load incidents:", err);
+        console.error("Failed to load incident datasets:", err);
       }
+    }
+
+    function switchDatasetScope(scope) {
+      activeScope = scope;
+      const tabCat = document.getElementById('tabCatalogBtn');
+      const tabHold = document.getElementById('tabHoldoutBtn');
+      const clusterDropdown = document.getElementById('clusterDropdownWrapper');
+      const scopeTag = document.getElementById('datasetScopeTag');
+
+      if (scope === 'catalog') {
+        tabCat.className = "px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 font-bold transition-all cursor-pointer";
+        tabHold.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition-all cursor-pointer";
+        clusterDropdown.classList.remove('hidden');
+        scopeTag.innerText = "SEEDED CATALOG";
+        scopeTag.className = "px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 text-[10px] font-mono border border-blue-500/30";
+        if (catalogIncidents.length > 0) selectIncidentById(catalogIncidents[0].id);
+      } else {
+        tabHold.className = "px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 font-bold transition-all cursor-pointer";
+        tabCat.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition-all cursor-pointer";
+        clusterDropdown.classList.add('hidden');
+        scopeTag.innerText = "UNSEEDED HOLDOUT";
+        scopeTag.className = "px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 text-[10px] font-mono border border-amber-500/30";
+        if (holdoutIncidents.length > 0) selectIncidentById(holdoutIncidents[0].id);
+      }
+      populateIncidentDropdown();
+      renderScenarioPills('all');
+    }
+
+    function getActiveDataset() {
+      return activeScope === 'catalog' ? catalogIncidents : holdoutIncidents;
     }
 
     function populateIncidentDropdown() {
       const select = document.getElementById('incidentDropdownSelect');
       if (!select) return;
-      select.innerHTML = incidentsData.map(inc => {
+      const data = getActiveDataset();
+      select.innerHTML = data.map(inc => {
         return `<option value="${inc.id}">[${inc.id}] ${inc.service}: ${inc.title.substring(0, 36)}...</option>`;
       }).join('');
     }
@@ -784,21 +712,28 @@
 
     function renderScenarioPills(clusterVal = 'all') {
       const container = document.getElementById('scenarioPills');
-      let filtered = incidentsData;
-      if (clusterVal !== 'all') {
+      let data = getActiveDataset();
+
+      if (activeScope === 'catalog' && clusterVal !== 'all') {
         const prefix = `INC-${clusterVal}`;
-        filtered = incidentsData.filter(inc => inc.id.startsWith(prefix));
+        data = data.filter(inc => inc.id.startsWith(prefix));
       }
 
-      container.innerHTML = filtered.map((inc) => {
+      container.innerHTML = data.map((inc) => {
         const isSelected = inc.id === currentSelectedId;
         const activeClass = isSelected
-          ? "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0"
+          ? (activeScope === 'catalog'
+              ? "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0"
+              : "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-amber-500/40 bg-amber-500/15 text-amber-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0")
           : "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0";
+
+        const dotColor = isSelected 
+          ? (activeScope === 'catalog' ? 'bg-emerald-400' : 'bg-amber-400')
+          : 'bg-slate-500';
 
         return `
           <button onclick="selectIncidentById('${inc.id}')" id="pill-${inc.id}" class="${activeClass}">
-            <span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-slate-500'}"></span>
+            <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
             <span class="font-bold text-white">${inc.id}</span>
             <span class="text-slate-400 hidden sm:inline">[${inc.service}]</span>
           </button>
@@ -808,15 +743,18 @@
 
     function selectIncidentById(incId) {
       currentSelectedId = incId;
-      const inc = incidentsData.find(i => i.id === incId);
+      const data = getActiveDataset();
+      const inc = data.find(i => i.id === incId) || catalogIncidents.find(i => i.id === incId) || holdoutIncidents.find(i => i.id === incId);
       if (!inc) return;
 
       // Update pills highlighting
       document.querySelectorAll('.scenario-pill').forEach((pill) => {
         if (pill.id === `pill-${incId}`) {
-          pill.className = "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0";
+          pill.className = activeScope === 'catalog'
+            ? "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0"
+            : "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-amber-500/40 bg-amber-500/15 text-amber-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shrink-0";
           const dot = pill.querySelector('span');
-          if (dot) dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+          if (dot) dot.className = `w-1.5 h-1.5 rounded-full ${activeScope === 'catalog' ? 'bg-emerald-400' : 'bg-amber-400'}`;
         } else {
           pill.className = "scenario-pill px-3 py-1.5 rounded-lg text-xs font-mono border border-surface-border hover:border-slate-600 bg-surface-card transition-all flex items-center gap-1.5 cursor-pointer text-slate-300 shrink-0";
           const dot = pill.querySelector('span');
@@ -826,24 +764,83 @@
 
       // Update dropdown
       const dropdown = document.getElementById('incidentDropdownSelect');
-      if (dropdown && dropdown.value !== incId) {
-        dropdown.value = incId;
-      }
+      if (dropdown && dropdown.value !== incId) dropdown.value = incId;
 
       document.getElementById('activeIncidentBadge').innerText = inc.id;
+      document.getElementById('activeSeverityBadge').innerText = inc.severity || 'P1 CRITICAL';
       document.getElementById('incidentIdInput').value = inc.id;
       document.getElementById('serviceInput').value = inc.service;
       document.getElementById('titleInput').value = inc.title;
       document.getElementById('symptomsInput').value = inc.symptoms;
       document.getElementById('stackTraceInput').value = inc.stack_trace;
-      document.getElementById('feedbackActionInput').value = "";
+      document.getElementById('feedbackActionInput').value = inc.verified_fix ? `Applied fix: ${inc.verified_fix}` : "";
       document.getElementById('feedbackStatus').innerText = "";
+      document.getElementById('reTriagePrompt').classList.add('hidden');
+
+      // Present clean preview state in triageOutput
+      renderInitialTriagePreview(inc);
+    }
+
+    function renderInitialTriagePreview(inc) {
+      const output = document.getElementById('triageOutput');
+      const badge = document.getElementById('triageModeBadge');
+      badge.innerText = "READY FOR TRIAGE";
+      badge.className = "text-[10px] font-mono px-2 py-0.5 rounded bg-surface-elevated text-slate-400 border border-surface-border";
+
+      const isHoldout = inc.id.startsWith("HOLD-");
+      const scopeBadge = isHoldout 
+        ? `<span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 font-mono text-[10px] border border-amber-500/30">UNSEEN GENERALIZATION HOLDOUT</span>`
+        : `<span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-mono text-[10px] border border-emerald-500/30">SEEDED CATALOG INCIDENT</span>`;
+
+      output.innerHTML = `
+        <div class="space-y-4">
+          <div class="p-4 bg-surface-base border border-surface-border rounded-xl space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="text-xs font-bold text-white font-mono">${inc.id}: ${inc.service}</span>
+              ${scopeBadge}
+            </div>
+            <h3 class="text-sm font-bold text-slate-100">${inc.title}</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">${inc.symptoms}</p>
+          </div>
+
+          <div class="p-4 bg-surface-elevated/40 border border-surface-border rounded-xl space-y-3">
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-200">
+              <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+              <span>Ready for Operational Inference</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Click <strong>"Triage with Memory"</strong> to query Hindsight's 4-way parallel recall over historical post-mortems and generate root-cause hypotheses, cited evidence, and verified remediation sequences.
+            </p>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="runTriage()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all shadow-sm">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i>
+                <span>Execute Triage Now</span>
+              </button>
+              <button onclick="runCompare()" class="px-3.5 py-1.5 rounded-lg bg-surface-base hover:bg-slate-700/60 border border-surface-border text-sky-300 font-mono text-xs flex items-center gap-1.5 cursor-pointer transition-all">
+                <i data-lucide="split" class="w-3.5 h-3.5"></i>
+                <span>Head-to-Head Compare</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+
+      // Clear memory evidence drawer until triage is run
+      const container = document.getElementById('memoryList');
+      const count = document.getElementById('memoriesCount');
+      count.innerText = "0 precedents cited";
+      container.innerHTML = `
+        <div class="text-xs text-slate-500 italic p-4 text-center bg-surface-base rounded-xl border border-surface-border font-mono">
+          Click "Triage with Memory" to retrieve cited historical post-mortems from Hindsight Cloud.
+        </div>
+      `;
     }
 
     function copyStackTrace() {
       const trace = document.getElementById('stackTraceInput').value;
       navigator.clipboard.writeText(trace);
-      alert("Stack trace copied to clipboard");
+      alert("Stack trace copied to clipboard.");
     }
 
     async function runTriage() {
@@ -854,12 +851,20 @@
 
       btn.disabled = true;
       btn.innerHTML = `<span class="animate-spin">⏳</span><span>Triaging...</span>`;
-      output.innerHTML = `<div class="p-8 text-center text-slate-400 font-mono text-xs animate-pulse">Running Hindsight 4-way parallel recall (BM25, Semantic, Graph, Temporal) and Groq LPU inference...</div>`;
+      output.innerHTML = `
+        <div class="p-8 text-center text-slate-400 font-mono text-xs space-y-3">
+          <div class="flex items-center justify-center gap-2 text-emerald-400 font-bold">
+            <span class="animate-spin text-base">⏳</span>
+            <span>Querying Hindsight Memory Bank & Groq LPU...</span>
+          </div>
+          <p class="text-slate-500 text-[11px]">Recalling BM25 error codes, vector semantic symptoms, and dependency graph topology...</p>
+        </div>
+      `;
 
       badge.innerText = useMem ? "MEMORY ACTIVE" : "STATELESS BASELINE";
       badge.className = useMem 
-        ? "text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-        : "text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20";
+        ? "text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+        : "text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30";
 
       try {
         const resp = await fetch('/api/incidents/triage', {
@@ -875,7 +880,8 @@
         });
         const data = await resp.json();
         output.innerHTML = DOMPurify.sanitize(marked.parse(data.analysis || ''));
-        renderMemories(data.recalled_memories || []);
+        activeMemories = data.recalled_memories || [];
+        renderMemories(activeMemories);
       } catch (err) {
         output.innerHTML = `<p class="text-rose-400 font-mono text-xs">Error communicating with backend API: ${err.message}</p>`;
       } finally {
@@ -885,24 +891,48 @@
       }
     }
 
-    function renderMemories(memories) {
+    function filterMemories(type) {
+      currentMemoryFilter = type;
+      ['all', 'world', 'experience', 'observation'].forEach(t => {
+        const b = document.getElementById(`memFilter-${t}`);
+        if (b) {
+          if (t === type) {
+            b.className = "px-2 py-0.5 rounded bg-surface-elevated text-white border border-surface-border font-bold";
+          } else {
+            b.className = "px-2 py-0.5 rounded text-slate-400 hover:text-white";
+          }
+        }
+      });
+
+      if (type === 'all') {
+        renderMemories(activeMemories);
+      } else {
+        const filtered = activeMemories.filter(m => (m.type || 'world').toLowerCase() === type);
+        renderMemories(filtered, true);
+      }
+    }
+
+    function renderMemories(memories, isFiltered = false) {
       const container = document.getElementById('memoryList');
       const count = document.getElementById('memoriesCount');
-      count.innerText = `${memories.length} precedents cited`;
+      if (!isFiltered) {
+        count.innerText = `${memories.length} precedents cited`;
+      }
 
       if (!memories.length) {
-        container.innerHTML = `<div class="text-xs text-slate-500 italic p-3 text-center bg-surface-base rounded border border-surface-border">Zero historical precedents retrieved. Operating in stateless cold-start mode.</div>`;
+        container.innerHTML = `<div class="text-xs text-slate-500 italic p-3 text-center bg-surface-base rounded-lg border border-surface-border font-mono">Zero matching historical precedents in memory drawer.</div>`;
         return;
       }
 
       container.innerHTML = memories.map((m, i) => {
         const mType = (m.type || 'world').toUpperCase();
         let badgeStyle = "bg-blue-500/15 text-blue-300 border-blue-500/30";
-        if (m.text.includes("WORKED")) badgeStyle = "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
-        if (m.text.includes("FAILED")) badgeStyle = "bg-rose-500/15 text-rose-300 border-rose-500/30";
+        if (m.text && m.text.includes("WORKED")) badgeStyle = "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+        if (m.text && m.text.includes("FAILED")) badgeStyle = "bg-rose-500/15 text-rose-300 border-rose-500/30";
         if (mType === "OBSERVATION") badgeStyle = "bg-purple-500/15 text-purple-300 border-purple-500/30";
+        if (mType === "EXPERIENCE") badgeStyle = "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
 
-        const score = m.scores?.final ? `Match: ${(m.scores.final * 100).toFixed(0)}%` : `Rank #${i+1}`;
+        const score = m.scores?.final ? `Score: ${(m.scores.final * 100).toFixed(0)}%` : `Rank #${i+1}`;
 
         return `
           <div class="p-3 bg-surface-base rounded-lg border border-surface-border text-xs space-y-1.5 hover:border-slate-600 transition-colors">
@@ -923,13 +953,14 @@
       const service = document.getElementById('serviceInput').value;
       const incidentId = document.getElementById('incidentIdInput').value || "INC-LIVE";
       const statusDiv = document.getElementById('feedbackStatus');
+      const reTriagePrompt = document.getElementById('reTriagePrompt');
 
       if (!action) {
-        alert("Please enter the mitigation action attempted");
+        alert("Please enter the mitigation action attempted.");
         return;
       }
 
-      statusDiv.innerText = `Recording ${status} outcome to Hindsight...`;
+      statusDiv.innerText = `Retaining ${status} outcome to Hindsight memory bank...`;
       try {
         const resp = await fetch('/api/incidents/feedback', {
           method: 'POST',
@@ -943,10 +974,16 @@
           })
         });
         const data = await resp.json();
-        statusDiv.innerText = `[✓] Successfully retained ${status} outcome as Experience Fact in Hindsight!`;
+        const memId = data.memory_id || 'exp_confirmed';
+        statusDiv.innerHTML = `[✓] Successfully retained as Experience Fact <code class="text-indigo-300 font-mono">${memId}</code> into Hindsight Cloud!`;
         statusDiv.className = status === 'WORKED' ? "text-[11px] font-mono text-emerald-400 text-center" : "text-[11px] font-mono text-rose-400 text-center";
+
+        if (status === 'FAILED') {
+          reTriagePrompt.classList.remove('hidden');
+          lucide.createIcons();
+        }
       } catch (err) {
-        statusDiv.innerText = "Error: " + err.message;
+        statusDiv.innerText = "Feedback persistence error: " + err.message;
         statusDiv.className = "text-[11px] font-mono text-rose-400 text-center";
       }
     }
@@ -957,8 +994,19 @@
       const memoryDiv = document.getElementById('memoryCompareContent');
       modal.classList.remove('hidden');
 
-      statelessDiv.innerHTML = `<p class="text-slate-400 animate-pulse font-mono text-xs">Running stateless baseline inference on Groq...</p>`;
-      memoryDiv.innerHTML = `<p class="text-slate-400 animate-pulse font-mono text-xs">Querying Hindsight multi-strategy recall...</p>`;
+      statelessDiv.innerHTML = `
+        <div class="py-12 text-center text-slate-400 font-mono text-xs space-y-2">
+          <span class="animate-spin text-base block">⏳</span>
+          <span>Running Stateless LLM baseline (zero memory)...</span>
+        </div>
+      `;
+      memoryDiv.innerHTML = `
+        <div class="py-12 text-center text-slate-400 font-mono text-xs space-y-2">
+          <span class="animate-spin text-base block">⏳</span>
+          <span>Querying Hindsight multi-strategy memory loop...</span>
+        </div>
+      `;
+      lucide.createIcons();
 
       try {
         const resp = await fetch('/api/incidents/compare', {
@@ -974,7 +1022,11 @@
         const data = await resp.json();
         statelessDiv.innerHTML = DOMPurify.sanitize(marked.parse(data.stateless.analysis || ''));
         memoryDiv.innerHTML = DOMPurify.sanitize(marked.parse(data.memory.analysis || ''));
-        document.getElementById('compareMemoryBadge').innerText = `${data.memory.recalled_memories_count} Precedents Recalled`;
+        
+        const stLat = data.stateless_latency_ms ? ` (${data.stateless_latency_ms}ms)` : '';
+        const memLat = data.memory_latency_ms ? ` (${data.memory_latency_ms}ms)` : '';
+        document.getElementById('compareStatelessBadge').innerText = `0 Precedents Cited${stLat}`;
+        document.getElementById('compareMemoryBadge').innerText = `${data.memory.recalled_memories?.length || 0} Precedents Cited${memLat}`;
       } catch (err) {
         statelessDiv.innerHTML = `<p class="text-rose-400 text-xs">Failed to load comparison: ${err.message}</p>`;
       }
@@ -1013,41 +1065,42 @@
       }
     }
 
-    function openCompareModal() { document.getElementById('compareModal').classList.remove('hidden'); }
+    function openCompareModal() { document.getElementById('compareModal').classList.remove('hidden'); lucide.createIcons(); }
     function closeCompareModal() { document.getElementById('compareModal').classList.add('hidden'); }
     function openReflectModal() { document.getElementById('reflectModal').classList.remove('hidden'); lucide.createIcons(); }
     function closeReflectModal() { document.getElementById('reflectModal').classList.add('hidden'); }
+    
     function openBandModal() { 
       const incId = document.getElementById('incidentIdInput').value || 'INC-101';
       const service = document.getElementById('serviceInput').value || 'payment-gw';
       document.getElementById('bandChannelName').innerText = `P1-${incId}-WAR-ROOM`;
+      document.getElementById('bandCliCommand').innerText = `.\\band\\incident_war_room.ps1 -IncidentId ${incId} -Service ${service}`;
+      
       const timeStr = new Date().toLocaleTimeString();
-      const warRoomMessages = document.querySelector('#bandModal .space-y-3.font-mono');
-      if (warRoomMessages) {
-        warRoomMessages.innerHTML = `
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-indigo-300">@IncidentLens-Agent</span>
-              <span>${timeStr}</span>
-            </div>
-            <p class="text-slate-200">🚨 P1 Outage detected on <strong>${service}</strong>. Recalled historical memory precedents from Hindsight bank.</p>
+      const container = document.getElementById('bandMessageContainer');
+      container.innerHTML = `
+        <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+          <div class="flex items-center justify-between text-[10px] text-slate-400">
+            <span class="font-bold text-indigo-300">@IncidentLens-Bot</span>
+            <span>${timeStr}</span>
           </div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-emerald-300">@SRE-Commander</span>
-              <span>${timeStr}</span>
-            </div>
-            <p class="text-slate-200">Session bridged via Band CLI coordinator. Reviewing recommended verified sequence and avoiding known failed actions.</p>
+          <p class="text-slate-200">🚨 P1 Outage detected on <strong>${service}</strong>. Recalled historical memory precedents from Hindsight bank.</p>
+        </div>
+        <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+          <div class="flex items-center justify-between text-[10px] text-slate-400">
+            <span class="font-bold text-emerald-300">@SRE-Commander</span>
+            <span>${timeStr}</span>
           </div>
-          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
-            <div class="flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-bold text-cyan-300">@Hindsight-Sync</span>
-              <span>${timeStr}</span>
-            </div>
-            <p class="text-emerald-400">✓ Bi-directional memory loop active: Operator mitigations will retain directly into episodic store.</p>
+          <p class="text-slate-200">Session bridged via Band CLI coordinator. Reviewing recommended verified sequence and avoiding known failed actions.</p>
+        </div>
+        <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+          <div class="flex items-center justify-between text-[10px] text-slate-400">
+            <span class="font-bold text-cyan-300">@Hindsight-Sync</span>
+            <span>${timeStr}</span>
           </div>
-        `;
-      }
+          <p class="text-emerald-400">✓ Bi-directional memory loop active: Operator mitigations retain directly into episodic store.</p>
+        </div>
+      `;
       document.getElementById('bandModal').classList.remove('hidden'); 
       lucide.createIcons(); 
     }
@@ -1174,7 +1227,7 @@
       const btn = document.getElementById('learningDemoBtn');
       if (btn) btn.disabled = true;
       output.innerHTML = `
-        <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl space-y-3 font-mono text-xs">
+        <div class="p-5 bg-purple-500/10 border border-purple-500/30 rounded-xl space-y-3 font-mono text-xs">
           <div class="flex items-center gap-2 text-purple-300 font-bold">
             <span class="animate-spin">⏳</span> Demonstrating Closed Learning Loop (Before vs After)...
           </div>
