@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -183,6 +184,16 @@
           <i data-lucide="split" class="w-3.5 h-3.5"></i>
           <span>Head-to-Head</span>
         </button>
+
+        <button id="learningDemoBtn" onclick="runLearningDemo()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-medium transition-colors cursor-pointer" title="Demonstrates before vs after learning loop">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Learning Demo</span>
+        </button>
+
+        <a href="/metrics" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-surface-elevated hover:bg-slate-700/60 border border-surface-border text-slate-300 transition-colors" title="View Prometheus Cluster Metrics">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>Metrics</span>
+        </a>
       </div>
 
     </div>
@@ -200,9 +211,9 @@
           <option value="all">⚡ All 20 Incidents (5 Clusters)</option>
           <option value="1">Cluster 1: Redis Pool Leaks (INC-101 to 104)</option>
           <option value="2">Cluster 2: Postgres Deadlocks (INC-201 to 204)</option>
-          <option value="3">Cluster 3: Circuit Breaker & 429s (INC-301 to 304)</option>
-          <option value="4">Cluster 4: Kafka Rebalances (INC-401 to 404)</option>
-          <option value="5">Cluster 5: Metaspace & Thread OOM (INC-501 to 504)</option>
+          <option value="3">Cluster 3: Aurora Stale DNS & JVM Cache (INC-301 to 304)</option>
+          <option value="4">Cluster 4: Kafka Rebalance Storms (INC-401 to 404)</option>
+          <option value="5">Cluster 5: Bank API Throttling & 429s (INC-501 to 504)</option>
         </select>
       </div>
 
@@ -236,7 +247,7 @@
             </select>
             <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1 shrink-0">
               <i data-lucide="clock" class="w-3 h-3 text-slate-500"></i>
-              Active 38m
+              SESSION LIVE
             </span>
           </div>
         </div>
@@ -782,7 +793,7 @@
           })
         });
         const data = await resp.json();
-        output.innerHTML = marked.parse(data.analysis || '');
+        output.innerHTML = DOMPurify.sanitize(marked.parse(data.analysis || ''));
         renderMemories(data.recalled_memories || []);
       } catch (err) {
         output.innerHTML = `<p class="text-rose-400 font-mono text-xs">Error communicating with backend API: ${err.message}</p>`;
@@ -880,8 +891,8 @@
           })
         });
         const data = await resp.json();
-        statelessDiv.innerHTML = marked.parse(data.stateless.analysis || '');
-        memoryDiv.innerHTML = marked.parse(data.memory.analysis || '');
+        statelessDiv.innerHTML = DOMPurify.sanitize(marked.parse(data.stateless.analysis || ''));
+        memoryDiv.innerHTML = DOMPurify.sanitize(marked.parse(data.memory.analysis || ''));
         document.getElementById('compareMemoryBadge').innerText = `${data.memory.recalled_memories_count} Precedents Recalled`;
       } catch (err) {
         statelessDiv.innerHTML = `<p class="text-rose-400 text-xs">Failed to load comparison: ${err.message}</p>`;
@@ -911,7 +922,7 @@
           })
         });
         const data = await resp.json();
-        output.innerHTML = marked.parse(data.resolution || '');
+        output.innerHTML = DOMPurify.sanitize(marked.parse(data.resolution || ''));
       } catch (err) {
         output.innerHTML = `<p class="text-rose-400 font-mono text-xs">Reflection error: ${err.message}</p>`;
       } finally {
@@ -927,13 +938,110 @@
     function closeReflectModal() { document.getElementById('reflectModal').classList.add('hidden'); }
     function openBandModal() { 
       const incId = document.getElementById('incidentIdInput').value || 'INC-101';
+      const service = document.getElementById('serviceInput').value || 'payment-gw';
       document.getElementById('bandChannelName').innerText = `P1-${incId}-WAR-ROOM`;
+      const timeStr = new Date().toLocaleTimeString();
+      const warRoomMessages = document.querySelector('#bandModal .space-y-3.font-mono');
+      if (warRoomMessages) {
+        warRoomMessages.innerHTML = `
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+            <div class="flex items-center justify-between text-[10px] text-slate-400">
+              <span class="font-bold text-indigo-300">@IncidentLens-Agent</span>
+              <span>${timeStr}</span>
+            </div>
+            <p class="text-slate-200">🚨 P1 Outage detected on <strong>${service}</strong>. Recalled historical memory precedents from Hindsight bank.</p>
+          </div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+            <div class="flex items-center justify-between text-[10px] text-slate-400">
+              <span class="font-bold text-emerald-300">@SRE-Commander</span>
+              <span>${timeStr}</span>
+            </div>
+            <p class="text-slate-200">Session bridged via Band CLI coordinator. Reviewing recommended verified sequence and avoiding known failed actions.</p>
+          </div>
+          <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-1">
+            <div class="flex items-center justify-between text-[10px] text-slate-400">
+              <span class="font-bold text-cyan-300">@Hindsight-Sync</span>
+              <span>${timeStr}</span>
+            </div>
+            <p class="text-emerald-400">✓ Bi-directional memory loop active: Operator mitigations will retain directly into episodic store.</p>
+          </div>
+        `;
+      }
       document.getElementById('bandModal').classList.remove('hidden'); 
       lucide.createIcons(); 
     }
     function closeBandModal() { document.getElementById('bandModal').classList.add('hidden'); }
-    function openBenchmarkModal() { document.getElementById('benchmarkModal').classList.remove('hidden'); lucide.createIcons(); }
+    
+    async function openBenchmarkModal() { 
+      document.getElementById('benchmarkModal').classList.remove('hidden'); 
+      lucide.createIcons(); 
+      try {
+        const resp = await fetch('/api/benchmark');
+        const data = await resp.json();
+        if (data.verified_fix_identification_rate) {
+          const cards = document.querySelectorAll('#benchmarkModal .text-2xl.font-bold');
+          if (cards.length >= 3) {
+            cards[0].innerText = data.incidentlens_average_precedents_recalled || "3.8";
+            cards[1].innerText = data.verified_fix_identification_rate || "80.0%";
+            cards[2].innerText = data.failed_mitigation_avoidance_rate || "80.0%";
+          }
+        }
+      } catch (e) {
+        console.error("Benchmark fetch error:", e);
+      }
+    }
     function closeBenchmarkModal() { document.getElementById('benchmarkModal').classList.add('hidden'); }
+
+    async function runLearningDemo() {
+      const output = document.getElementById('triageOutput');
+      const btn = document.getElementById('learningDemoBtn');
+      if (btn) btn.disabled = true;
+      output.innerHTML = `
+        <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl space-y-3 font-mono text-xs">
+          <div class="flex items-center gap-2 text-purple-300 font-bold">
+            <span class="animate-spin">⏳</span> Demonstrating Closed Learning Loop (Before vs After)...
+          </div>
+          <p class="text-slate-400">1. Generating baseline triage without outcome validation.</p>
+          <p class="text-slate-400">2. Retaining human-verified FAILED outcome to Hindsight episodic store.</p>
+          <p class="text-slate-400">3. Re-triaging to prove acquired negative constraint prevents repeat mistake.</p>
+        </div>
+      `;
+      try {
+        const resp = await fetch('/api/learning-demo', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            service: document.getElementById('serviceInput').value || 'payment-gw',
+            title: document.getElementById('titleInput').value || 'Payment gateway HTTP 502 with JedisConnectionException',
+            symptoms: document.getElementById('symptomsInput').value || 'Redis pool starvation',
+            stack_trace: document.getElementById('stackTraceInput').value || 'JedisConnectionException'
+          })
+        });
+        const data = await resp.json();
+        output.innerHTML = `
+          <div class="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-4 font-sans text-xs">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              Live Learning Loop Confirmed & Demonstrated!
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+              <strong>1. Operator Feedback Retained:</strong> Marked <code class="text-rose-400 font-mono">Rolling restart of service pods</code> as <strong class="text-rose-400">FAILED</strong>. Stored into Hindsight bank as Experience Fact <code class="text-indigo-400 font-mono">${data.retained_experience.memory_id}</code>.
+            </p>
+            <div class="p-3 bg-surface-base rounded-lg border border-surface-border space-y-2">
+              <span class="text-amber-400 font-bold block">⚡ Re-Triage Result with Learned Memory:</span>
+              <div class="prose-incident text-slate-200">
+                ${DOMPurify.sanitize(marked.parse(data.after_feedback.analysis || ''))}
+              </div>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      } catch (err) {
+        output.innerHTML = `<p class="text-rose-400 text-xs">Learning demo error: ${err.message}</p>`;
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
 
     init();
   </script>

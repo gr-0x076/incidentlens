@@ -6,6 +6,7 @@ Integrates Hindsight SDK for biomimetic memory and Groq for ultra-low latency LL
 import os
 import json
 import re
+import time
 import requests
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
@@ -59,6 +60,32 @@ class IncidentLensEngine:
         base = self.hindsight_base_url.rstrip("/")
         return f"{base}/v1/default/banks/{self.bank_id}/{endpoint.lstrip('/')}"
 
+    def check_hindsight_live(self) -> Dict[str, Any]:
+        """
+        Performs a true network heartbeat to Hindsight Cloud / Local container.
+        Returns live connectivity and latency.
+        """
+        if not self.hindsight_api_key and "localhost" not in self.hindsight_base_url:
+            return {"connected": False, "error": "No HINDSIGHT_API_KEY configured", "latency_ms": 0}
+        
+        start_time = time.time()
+        try:
+            payload = {"query": "healthcheck", "budget": "low"}
+            resp = requests.post(self._hs_url("memories/recall"), headers=self._hs_headers(), json=payload, timeout=3.5)
+            latency = int((time.time() - start_time) * 1000)
+            if resp.status_code in (200, 201):
+                return {"connected": True, "latency_ms": latency, "status_code": resp.status_code}
+            else:
+                return {
+                    "connected": False, 
+                    "latency_ms": latency, 
+                    "status_code": resp.status_code, 
+                    "error": f"HTTP {resp.status_code}: {resp.text[:100]}"
+                }
+        except Exception as e:
+            latency = int((time.time() - start_time) * 1000)
+            return {"connected": False, "latency_ms": latency, "error": str(e)}
+
     def retain_incident(self, incident: Dict[str, Any]) -> str:
         """
         Retains a historical incident post-mortem into the Hindsight memory bank via direct REST API.
@@ -93,6 +120,18 @@ class IncidentLensEngine:
             print(f"[IncidentLens] Retain error: {e}")
             return "err"
 
+    def retain_batch(self, items: List[Dict[str, Any]]) -> bool:
+        """
+        Retains a batch of memory items into the Hindsight memory bank.
+        """
+        payload = {"items": items}
+        try:
+            resp = requests.post(self._hs_url("memories"), headers=self._hs_headers(), json=payload, timeout=45)
+            return resp.status_code in (200, 201)
+        except Exception as e:
+            print(f"[IncidentLens] Retain batch error: {e}")
+            return False
+
     def record_mitigation_outcome(
         self,
         incident_id: str,
@@ -103,6 +142,7 @@ class IncidentLensEngine:
     ) -> Dict[str, Any]:
         """
         Closes the learning loop: Records human-validated mitigation outcome as an Experience Fact via direct REST API.
+        Returns genuine success status based on HTTP confirmation from Hindsight.
         """
         content = (
             f"During incident {incident_id} on service '{service}', the mitigation '{action}' was attempted. "
@@ -125,22 +165,37 @@ class IncidentLensEngine:
             }]
         }
 
+        success = False
+        error_msg = None
+        upstream_mem_id = None
+
         try:
             resp = requests.post(self._hs_url("memories"), headers=self._hs_headers(), json=payload, timeout=30)
-            if resp.status_code == 200:
+            if resp.status_code in (200, 201):
+                success = True
+                try:
+                    res_json = resp.json()
+                    upstream_mem_id = res_json.get("items", [{}])[0].get("id") or res_json.get("id")
+                except Exception:
+                    pass
                 print(f"[IncidentLens] Successfully retained feedback outcome for {incident_id} ({status})")
+            else:
+                error_msg = f"Hindsight API returned HTTP {resp.status_code}: {resp.text[:120]}"
+                print(f"[IncidentLens] Upstream retain warning: {error_msg}")
         except Exception as e:
-            print(f"[IncidentLens] Retain outcome error: {e}")
+            error_msg = f"Hindsight connection error: {str(e)}"
+            print(f"[IncidentLens] Retain outcome error: {error_msg}")
 
         return {
-            "success": True,
-            "memory_id": mem_id,
+            "success": success,
+            "error": error_msg,
+            "memory_id": upstream_mem_id or mem_id,
             "incident_id": incident_id,
             "service": service,
             "action": action,
             "status": status.upper(),
             "notes": notes,
-            "recorded_at": datetime.now().isoformat()
+            "recorded_at": datetime.now(timezone.utc).isoformat()
         }
 
     def recall_incident_context(self, query: str, service: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -190,15 +245,19 @@ class IncidentLensEngine:
             resp = requests.post(self._hs_url("reflect"), headers=self._hs_headers(), json=payload, timeout=45)
             if resp.status_code == 200:
                 data = resp.json()
-                return data.get("text", "")
+                text = data.get("text", "")
+                if text:
+                    return text
+            return (
+                f"[Reflection Insufficient Evidence] Hindsight returned HTTP {resp.status_code}. "
+                f"No verified cross-service conflict precedents found between '{service_a}' and '{service_b}' for action '{policy_action}'."
+            )
         except Exception as e:
             print(f"[IncidentLens] Reflect error: {e}")
-
-        return (
-            f"Policy Analysis for '{policy_action}': "
-            f"Applying '{policy_action}' on {service_a} succeeded previously, but applying it on {service_b} "
-            f"triggers architectural conflicts due to resource contention and thread-pool exhaustion."
-        )
+            return (
+                f"[Reflection Service Offline] Unable to reach upstream Hindsight reflect endpoint ({e}). "
+                f"No synthetic policy conclusion generated."
+            )
 
     def _synthesize_sre_analysis(
         self,

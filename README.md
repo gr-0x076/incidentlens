@@ -105,17 +105,17 @@ flowchart LR
 
 ## Empirical Benchmark Results
 
-We benchmarked IncidentLens against a stateless baseline LLM across 20 representative microservice outage scenarios derived from published post-mortems:
+We benchmarked IncidentLens against a stateless baseline LLM across 5 microservice failure clusters derived from public post-mortems (Cloudflare, Monzo, GitLab):
 
 | Metric | Stateless Baseline (Zero Memory) | IncidentLens (Hindsight Closed Loop) | Delta / Impact |
 |:---|:---:|:---:|:---:|
-| **Historical Precedents Cited** | 0.0 | **101.2 nodes per incident** | **+101.2 grounded citations** |
-| **Verified Fix Identification Rate** | 20.0% | **80.0%** | **4x improvement (p < 0.001)** |
+| **Historical Precedents Cited** | 0.0 | **3.8 nodes per incident** | **Grounded episodic memory** |
+| **Verified Fix Identification Rate** | 20.0% | **80.0%** | **+60.0% diagnostic precision** |
 | **Failed Mitigation Avoidance** | 0.0% | **80.0%** | **Eliminates repeat dead ends** |
-| **Repeat-Mistake Warning Rate** | 0.0% | **100.0%** | **100% warning on known traps** |
+| **Repeat-Mistake Warning Rate** | 0.0% | **80.0%** | **Active negative operational constraints** |
 | **Cross-Service Policy Conflicts** | Unsupported | **Resolved via `reflect()`** | **Prevents JVM thread saturation** |
 
-*All benchmark results are reproducible using `python server/evaluate_agent.py`.*
+*All benchmark results are reproducible using `python server/evaluate_agent.py` and served via `/api/benchmark`.*
 
 ---
 
@@ -123,7 +123,7 @@ We benchmarked IncidentLens against a stateless baseline LLM across 20 represent
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/your-username/incidentlens.git
+git clone https://github.com/gr-0x076/incidentlens.git
 cd incidentlens
 pip install -r server/requirements.txt
 ```

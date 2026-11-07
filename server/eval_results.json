@@ -1,8 +1,11 @@
 {
   "test_cases_evaluated": 5,
+  "sample_clusters": 5,
   "stateless_average_precedents_recalled": 0.0,
-  "incidentlens_average_precedents_recalled": 101.2,
-  "verified_fix_identification_rate": "100.0%",
-  "failed_mitigation_avoidance_rate": "80.0%",
-  "repeat_mistake_prevention": "100% of tested scenarios actively flagged past failed mitigations"
+  "incidentlens_average_precedents_recalled": 0.0,
+  "verified_fix_identification_rate": "80.0%",
+  "failed_mitigation_avoidance_rate": "0.0%",
+  "stateless_failed_mitigation_avoidance_rate": "0.0%",
+  "repeat_mistake_prevention": "0.0% of tested scenarios actively flagged past failed mitigations",
+  "evaluation_methodology": "Domain diagnostic concept matching and negative action constraint verification across microservice failure clusters"
 }

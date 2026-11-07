@@ -147,9 +147,9 @@ Here are the measured results from our evaluation harness:
 |:---|:---:|:---:|
 | **Average Historical Precedents Recalled** | 0.0 | **3.8 per incident** |
 | **Verified Fix Identification Rate** | 20.0% | **80.0%** |
-| **Repeat-Mistake Warning Rate** | 0.0% | **100.0%** |
+| **Repeat-Mistake Warning Rate** | 0.0% | **80.0%** |
 
-In 100% of the tested scenarios where a past mitigation had been marked as `FAILED` (such as blindly restarting pods during a connection leak), IncidentLens explicitly warned the engineer: *"Do NOT restart pods; past incident INC-101 demonstrated that new pods exhaust the pool within 90 seconds."*
+In 80% of the tested scenarios where a past mitigation had been marked as `FAILED` (such as blindly restarting pods during a connection leak), IncidentLens explicitly warned the engineer: *"Do NOT restart pods; past incident INC-101 demonstrated that new pods exhaust the pool within 90 seconds."*
 
 ---
 

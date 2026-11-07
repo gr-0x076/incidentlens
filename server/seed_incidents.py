@@ -17,12 +17,14 @@ def seed_and_inspect():
 
     engine = IncidentLensEngine(bank_id="incidentlens-sre-bank")
 
-    if not engine.hs_client:
-        print("[!] Hindsight client not connected. Is Hindsight running?")
+    health = engine.check_hindsight_live()
+    if not health.get("connected"):
+        print(f"[!] Warning: Cannot reach Hindsight Cloud at {engine.hindsight_base_url}")
+        print(f"    Error details: {health.get('error')}")
         print("    Check HINDSIGHT_BASE_URL and HINDSIGHT_API_KEY in server/.env")
         sys.exit(1)
 
-    print(f"[*] Connected to Hindsight at: {engine.hindsight_base_url}")
+    print(f"[*] Connected to Hindsight at: {engine.hindsight_base_url} (Latency: {health.get('latency_ms', 0)}ms)")
     print(f"[*] Target Memory Bank: {engine.bank_id}")
 
     # Step 1: Ingest 1 Incident First & Inspect
@@ -46,7 +48,8 @@ def seed_and_inspect():
         status="FAILED",
         notes="Pods drained connection pool within 90 seconds."
     )
-    print(f"[✓] Recorded FAILED mitigation: {outcome1['action']}")
+    status_icon1 = "✓" if outcome1["success"] else "!"
+    print(f"[{status_icon1}] Recorded FAILED mitigation: {outcome1['action']} (Success: {outcome1['success']})")
 
     outcome2 = engine.record_mitigation_outcome(
         incident_id=sample["id"],
@@ -55,7 +58,8 @@ def seed_and_inspect():
         status="WORKED",
         notes="Pool recovered immediately."
     )
-    print(f"[✓] Recorded WORKED mitigation: {outcome2['action']}")
+    status_icon2 = "✓" if outcome2["success"] else "!"
+    print(f"[{status_icon2}] Recorded WORKED mitigation: {outcome2['action']} (Success: {outcome2['success']})")
 
     # Step 4: Batch Ingest Remaining Incidents
     remaining = INCIDENTS[1:]
@@ -72,9 +76,9 @@ def seed_and_inspect():
             f"Verified fix: {inc['verified_fix']}."
         )
         try:
-            dt = datetime.fromisoformat(inc['timestamp'].replace("Z", "+00:00"))
+            dt = inc.get('timestamp') or datetime.now(timezone.utc).isoformat()
         except Exception:
-            dt = datetime.now(timezone.utc)
+            dt = datetime.now(timezone.utc).isoformat()
 
         batch_items.append({
             "content": content,
@@ -114,24 +118,28 @@ def seed_and_inspect():
     for chunk_idx in range(0, len(batch_items), chunk_size):
         chunk = batch_items[chunk_idx:chunk_idx + chunk_size]
         print(f"    --> Retaining batch chunk {chunk_idx // chunk_size + 1}/{(len(batch_items) + chunk_size - 1) // chunk_size} ({len(chunk)} items)...")
-        try:
-            res = engine.hs_client.retain_batch(bank_id=engine.bank_id, items=chunk)
-            print(f"        [✓] Chunk retained: items_count={getattr(res, 'items_count', len(chunk))}")
-        except Exception as e:
-            print(f"        [!] Chunk error: {e}. Falling back to individual retains...")
+        ok = engine.retain_batch(chunk)
+        if ok:
+            print(f"        [✓] Chunk retained successfully ({len(chunk)} items).")
+        else:
+            print(f"        [!] Chunk batch failed. Retaining individual items...")
             for it in chunk:
                 try:
-                    engine.hs_client.retain(
-                        bank_id=engine.bank_id,
-                        content=it["content"],
-                        context=it["context"],
-                        timestamp=it["timestamp"],
-                        metadata=it["metadata"]
-                    )
+                    engine.retain_incident({
+                        "id": it["metadata"]["incident_id"],
+                        "service": it["metadata"]["service"],
+                        "severity": it["metadata"].get("severity", "P2"),
+                        "title": it["metadata"].get("type", "event"),
+                        "symptoms": it["content"],
+                        "stack_trace": "",
+                        "root_cause": "",
+                        "verified_fix": "",
+                        "timestamp": it.get("timestamp")
+                    })
                 except Exception as ie:
                     print(f"            [-] Item error: {ie}")
 
-    print("\n[✓] Ingestion complete! Memory bank is populated with all 20 incidents and experience facts.")
+    print("\n[✓] Ingestion complete! Memory bank is populated with all incidents and experience facts.")
     print("[*] Hindsight will automatically consolidate observations and causal connections.")
 
 
